@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hojas - Biodiversidad</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 0.6s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .header {
+        background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+        padding: 40px 30px;
+        color: white;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .scientific-name {
+        font-style: italic;
+        font-size: 1.2em;
+        opacity: 0.95;
+      }
+
+      .content {
+        padding: 30px;
+      }
+
+      .image-container {
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .image-container img {
+        max-width: 100%;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .info-section {
+        margin: 30px 0;
+      }
+
+      .info-section h2 {
+        color: #2d7a2e;
+        margin-bottom: 15px;
+        font-size: 1.8em;
+        border-left: 4px solid #56ab2f;
+        padding-left: 15px;
+      }
+
+      .info-section p {
+        line-height: 1.8;
+        color: #333;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 15px rgba(86, 171, 47, 0.4);
+      }
+
+      .reset-btn:hover {
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🍃 Las Hojas</h1>
+        <p class="scientific-name">Órgano fotosintético de las plantas</p>
+      </div>
+
+      <div class="content">
+        <div class="image-container">
+          <img
+            src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=800"
+            alt="Hojas"
+          />
+        </div>
+
+        <div class="info-section">
+          <h2>Sobre las Hojas</h2>
+          <p>
+            Las hojas son los órganos de las plantas donde ocurre la
+            fotosíntesis, el proceso mediante el cual las plantas convierten la
+            luz solar, agua y dióxido de carbono en azúcares y oxígeno. Son
+            esenciales para la vida en la Tierra.
+          </p>
+          <p>
+            Existen hojas de todas las formas y tamaños: desde pequeñas agujas
+            de pino hasta enormes hojas de palma. Cada forma está adaptada al
+            ambiente donde vive la planta.
+          </p>
+        </div>
+
+        <div class="facts-grid">
+          <div class="fact-card">
+            <div class="label">O₂ producido</div>
+            <div class="value">~28%</div>
+          </div>
+          <div class="fact-card">
+            <div class="label">Tipos de hojas</div>
+            <div class="value">Miles</div>
+          </div>
+          <div class="fact-card">
+            <div class="label">Clorofila</div>
+            <div class="value">Verde</div>
+          </div>
+          <div class="fact-card">
+            <div class="label">Estomas</div>
+            <div class="value">Miles/hoja</div>
+          </div>
+        </div>
+
+        <div class="curiosity-box">
+          <h3>💡 ¿Sabías que...?</h3>
+          <p>
+            Una sola hoja madura puede tener hasta 100,000 estomas (pequeños
+            poros) que se abren y cierran para controlar el intercambio de
+            gases. Las hojas también pueden "sudar" mediante un proceso llamado
+            transpiración, liberando vapor de agua al aire. Un árbol grande
+            puede transpirar hasta 450 litros de agua por día.
+          </p>
+        </div>
+
+        <div class="info-section">
+          <h2>Importancia en la Biodiversidad</h2>
+          <p>
+            Las hojas son la base de casi todas las cadenas alimenticias
+            terrestres. Producen aproximadamente el 28% del oxígeno del planeta
+            (el resto lo producen las algas marinas). Sin hojas, no habría vida
+            animal en la Tierra.
+          </p>
+          <p>
+            Las hojas caídas también son vitales para los ecosistemas
+            forestales. Se descomponen y nutren el suelo, proporcionan hogar a
+            insectos, lombrices y microorganismos, y mantienen la humedad del
+            suelo.
+          </p>
+        </div>
+
+        <div class="quiz-section">
+          <h2>🎮 ¡Demuestra lo que aprendiste!</h2>
+
+          <div class="question" id="q1">
+            <h3>1. ¿Qué proceso vital ocurre en las hojas?</h3>
+            <div class="options">
+              <div class="option" onclick="checkAnswer(1, 0, false)">
+                Digestión
+              </div>
+              <div class="option" onclick="checkAnswer(1, 1, true)">
+                Fotosíntesis
+              </div>
+              <div class="option" onclick="checkAnswer(1, 2, false)">
+                Respiración celular
+              </div>
+            </div>
+          </div>
+
+          <div class="question" id="q2">
+            <h3>
+              2. ¿Qué porcentaje aproximado del oxígeno del planeta producen las
+              hojas?
+            </h3>
+            <div class="options">
+              <div class="option" onclick="checkAnswer(2, 0, false)">10%</div>
+              <div class="option" onclick="checkAnswer(2, 1, true)">28%</div>
+              <div class="option" onclick="checkAnswer(2, 2, false)">60%</div>
+            </div>
+          </div>
+
+          <div class="question" id="q3">
+            <h3>3. ¿Cómo se llaman los pequeños poros en las hojas?</h3>
+            <div class="options">
+              <div class="option" onclick="checkAnswer(3, 0, true)">
+                Estomas
+              </div>
+              <div class="option" onclick="checkAnswer(3, 1, false)">
+                Cloroplastos
+              </div>
+              <div class="option" onclick="checkAnswer(3, 2, false)">
+                Nervaduras
+              </div>
+            </div>
+          </div>
+
+          <div class="score" id="quizScore"></div>
+          <button
+            class="reset-btn"
+            onclick="resetQuiz()"
+            style="display: none"
+            id="quizResetBtn"
+          >
+            Intentar de nuevo
+          </button>
+        </div>
+
+        <div class="quiz-section labeling-game">
+          <h2>🎯 Etiqueta las Partes de la Hoja</h2>
+          <div class="game-instructions">
+            Arrastra cada término a su posición correcta en la hoja
+          </div>
+
+          <div class="leaf-diagram">
+            <svg
+              class="leaf-svg"
+              viewBox="0 0 400 300"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <!-- Hoja -->
+              <path
+                d="M200 20 Q250 50 280 100 Q290 150 280 180 Q250 230 200 260 Q150 230 120 180 Q110 150 120 100 Q150 50 200 20 Z"
+                fill="#7cb342"
+                stroke="#558b2f"
+                stroke-width="3"
+              />
+              <!-- Nervadura central -->
+              <line
+                x1="200"
+                y1="20"
+                x2="200"
+                y2="260"
+                stroke="#558b2f"
+                stroke-width="4"
+              />
+              <!-- Nervaduras secundarias -->
+              <line
+                x1="200"
+                y1="80"
+                x2="260"
+                y2="110"
+                stroke="#558b2f"
+                stroke-width="2"
+              />
+              <line
+                x1="200"
+                y1="140"
+                x2="265"
+                y2="160"
+                stroke="#558b2f"
+                stroke-width="2"
+              />
+              <line
+                x1="200"
+                y1="200"
+                x2="250"
+                y2="220"
+                stroke="#558b2f"
+                stroke-width="2"
+              />
+              <line
+                x1="200"
+                y1="80"
+                x2="140"
+                y2="110"
+                stroke="#558b2f"
+                stroke-width="2"
+              />
+              <line
+                x1="200"
+                y1="140"
+                x2="135"
+                y2="160"
+                stroke="#558b2f"
+                stroke-width="2"
+              />
+              <line
+                x1="200"
+                y1="200"
+                x2="150"
+                y2="220"
+                stroke="#558b2f"
+                stroke-width="2"
+              />
+              <!-- Pecíolo -->
+              <line
+                x1="200"
+                y1="260"
+                x2="200"
+                y2="290"
+                stroke="#6d4c41"
+                stroke-width="6"
+              />
+              <!-- Puntos de referencia -->
+              <circle cx="200" cy="30" r="5" fill="#ff6f00" />
+              <circle cx="270" cy="130" r="5" fill="#ff6f00" />
+              <circle cx="200" cy="275" r="5" fill="#ff6f00" />
+              <circle cx="200" cy="140" r="5" fill="#ff6f00" />
+            </svg>
+
+            <div
+              class="drop-target"
+              style="top: 5px; left: 50%; transform: translateX(-50%)"
+              data-correct="apice"
+            >
+              Soltar aquí
+            </div>
+            <div
+              class="drop-target"
+              style="top: 110px; right: 10px"
+              data-correct="borde"
+            >
+              Soltar aquí
+            </div>
+            <div
+              class="drop-target"
+              style="bottom: 10px; left: 50%; transform: translateX(-50%)"
+              data-correct="peciolo"
+            >
+              Soltar aquí
+            </div>
+            <div
+              class="drop-target"
+              style="top: 45%; left: 50%; transform: translate(-50%, -50%)"
+              data-correct="lamina"
+            >
+              Soltar aquí
+            </div>
+          </div>
+
+          <div class="label-options" id="labelOptions">
+            <div class="label-draggable" draggable="true" data-label="apice">
+              Ápice
+            </div>
+            <div class="label-draggable" draggable="true" data-label="lamina">
+              Lámina
+            </div>
+            <div class="label-draggable" draggable="true" data-label="borde">
+              Borde
+            </div>
+            <div class="label-draggable" draggable="true" data-label="peciolo">
+              Pecíolo
+            </div>
+          </div>
+
+          <div class="score" id="labelScore">Partes correctas: 0/4</div>
+          <button
+            class="reset-btn"
+            onclick="resetLabeling()"
+            style="display: none"
+            id="labelResetBtn"
+          >
+            Jugar de nuevo
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Quiz
+      let quizScore = 0;
+      let quizAnswered = 0;
+      const totalQuestions = 3;
+
+      function checkAnswer(questionNum, optionIndex, isCorrect) {
+        const question = document.getElementById('q' + questionNum);
+        const options = question.querySelectorAll('.option');
+
+        if (
+          options[optionIndex].classList.contains('correct') ||
+          options[optionIndex].classList.contains('incorrect')
+        ) {
+          return;
+        }
+
+        options.forEach((opt) => (opt.style.pointerEvents = 'none'));
+
+        if (isCorrect) {
+          options[optionIndex].classList.add('correct');
+          quizScore++;
+        } else {
+          options[optionIndex].classList.add('incorrect');
+          options.forEach((opt) => {
+            if (opt.onclick.toString().includes('true')) {
+              opt.classList.add('correct');
+            }
+          });
+        }
+
+        quizAnswered++;
+        updateQuizScore();
+      }
+
+      function updateQuizScore() {
+        const scoreDiv = document.getElementById('quizScore');
+        const resetBtn = document.getElementById('quizResetBtn');
+
+        if (quizAnswered === totalQuestions) {
+          const percentage = (quizScore / totalQuestions) * 100;
+          let message =
+            percentage === 100
+              ? '🎉 ¡Perfecto! ¡Eres un experto en hojas!'
+              : percentage >= 66
+              ? '👏 ¡Muy bien! Conoces mucho sobre las hojas.'
+              : '🍃 ¡Sigue aprendiendo! Las hojas son fascinantes.';
+
+          scoreDiv.innerHTML = `Puntuación: ${quizScore}/${totalQuestions}<br>${message}`;
+          resetBtn.style.display = 'block';
+        }
+      }
+
+      function resetQuiz() {
+        quizScore = 0;
+        quizAnswered = 0;
+
+        for (let i = 1; i <= totalQuestions; i++) {
+          const question = document.getElementById('q' + i);
+          const options = question.querySelectorAll('.option');
+          options.forEach((opt) => {
+            opt.classList.remove('correct', 'incorrect');
+            opt.style.pointerEvents = 'auto';
+          });
+        }
+
+        document.getElementById('quizScore').innerHTML = '';
+        document.getElementById('quizResetBtn').style.display = 'none';
+      }
+
+      // Labeling Game
+      let correctLabels = 0;
+      let draggedLabel = null;
+
+      const draggables = document.querySelectorAll('.label-draggable');
+      const dropTargets = document.querySelectorAll('.drop-target');
+
+      draggables.forEach((draggable) => {
+        draggable.addEventListener('dragstart', () => {
+          draggedLabel = draggable;
+        });
+      });
+
+      dropTargets.forEach((target) => {
+        target.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          target.classList.add('drag-over');
+        });
+
+        target.addEventListener('dragleave', () => {
+          target.classList.remove('drag-over');
+        });
+
+        target.addEventListener('drop', (e) => {
+          e.preventDefault();
+          target.classList.remove('drag-over');
+
+          if (target.classList.contains('correct') || !draggedLabel) return;
+
+          const correctLabel = target.dataset.correct;
+          const droppedLabel = draggedLabel.dataset.label;
+
+          if (correctLabel === droppedLabel) {
+            target.textContent = draggedLabel.textContent;
+            target.classList.add('correct');
+            draggedLabel.classList.add('used');
+            correctLabels++;
+            updateLabelScore();
+          }
+
+          draggedLabel = null;
+        });
+      });
+
+      function updateLabelScore() {
+        const scoreDiv = document.getElementById('labelScore');
+        const resetBtn = document.getElementById('labelResetBtn');
+
+        scoreDiv.textContent = `Partes correctas: ${correctLabels}/4`;
+
+        if (correctLabels === 4) {
+          scoreDiv.innerHTML +=
+            '<br>🎊 ¡Excelente! ¡Etiquetaste toda la hoja correctamente!';
+          resetBtn.style.display = 'block';
+        }
+      }
+
+      function resetLabeling() {
+        correctLabels = 0;
+
+        dropTargets.forEach((target) => {
+          target.classList.remove('correct');
+          target.textContent = 'Soltar aquí';
+        });
+
+        draggables.forEach((d) => d.classList.remove('used'));
+
+        document.getElementById('labelScore').textContent =
+          'Partes correctas: 0/4';
+        document.getElementById('labelResetBtn').style.display = 'none';
+      }
+    </script>
+  </body>
+</html>

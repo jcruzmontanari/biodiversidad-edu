@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Semillas - Biodiversidad</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #d4a574 0%, #e9c891 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 0.6s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .header {
+        background: linear-gradient(135deg, #d4a574 0%, #e9c891 100%);
+        padding: 40px 30px;
+        color: white;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .scientific-name {
+        font-style: italic;
+        font-size: 1.2em;
+        opacity: 0.95;
+      }
+
+      .content {
+        padding: 30px;
+      }
+
+      .image-container {
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .image-container img {
+        max-width: 100%;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .info-section {
+        margin: 30px 0;
+      }
+
+      .info-section h2 {
+        color: #8b6914;
+        margin-bottom: 15px;
+        font-size: 1.8em;
+        border-left: 4px solid #d4a574;
+        padding-left: 15px;
+      }
+
+      .info-section p {
+        line-height: 1.8;
+        color: #333;
+        font-size: 1.1em;
+        margin-bottom: 15px;
+      }
+
+      .facts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+      }
+
+      .fact-card {
+        background: linear-gradient(135deg, #d4a574 0%, #e9c891 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        transition: transform 0.3s ease;
+      }
+
+      .fact-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .fact-card .label {
+        font-size: 0.9em;
+        opacity: 0.95;
+        margin-bottom: 5px;
+      }
+
+      .fact-card .value {
+        font-size: 1.4em;
+        font-weight: bold;
+      }
+
+      .curiosity-box {
+        background: #fef9f0;
+        border-left: 4px solid #8b6914;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+      }
+
+      .curiosity-box h3 {
+        color: #8b6914;
+        margin-bottom: 10px;
+      }
+
+      .quiz-section {
+        background: #fef9f0;
+        padding: 30px;
+        border-radius: 15px;
+        margin-top: 30px;
+      }
+
+      .quiz-section h2 {
+        color: #8b6914;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .question {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .question h3 {
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .option {
+        padding: 15px;
+        background: white;
+        border: 2px solid #f0e5d8;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .option:hover {
+        border-color: #8b6914;
+        background: #fef9f0;
+      }
+
+      .option.correct {
+        background: #4caf50;
+        color: white;
+        border-color: #4caf50;
+      }
+
+      .option.incorrect {
+        background: #f44336;
+        color: white;
+        border-color: #f44336;
+      }
+
+      .lifecycle-game {
+        margin-top: 30px;
+      }
+
+      .game-instructions {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #666;
+      }
+
+      .stages-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin: 20px 0;
+      }
+
+      .stage-slot {
+        padding: 20px;
+        background: white;
+        border: 3px dashed #f0e5d8;
+        border-radius: 10px;
+        min-height: 80px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: all 0.3s ease;
+      }
+
+      .stage-slot .number {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #d4a574 0%, #e9c891 100%);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.2em;
+      }
+
+      .stage-slot.drag-over {
+        background: #fef9f0;
+        border-color: #8b6914;
+      }
+
+      .stage-slot.correct {
+        background: #e8f5e9;
+        border-color: #4caf50;
+        border-style: solid;
+      }
+
+      .stage-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+
+      .stage-item {
+        padding: 15px;
+        background: linear-gradient(135deg, #d4a574 0%, #e9c891 100%);
+        color: white;
+        border-radius: 10px;
+        cursor: move;
+        text-align: center;
+        transition: transform 0.3s ease;
+        font-weight: bold;
+      }
+
+      .stage-item:hover {
+        transform: scale(1.05);
+      }
+
+      .stage-item.used {
+        opacity: 0.3;
+        pointer-events: none;
+      }
+
+      .score {
+        text-align: center;
+        font-size: 1.5em;
+        color: #8b6914;
+        margin-top: 20px;
+        font-weight: bold;
+      }
+
+      .reset-btn {
+        display: block;
+        margin: 20px auto;
+        padding: 15px 40px;
+        background: linear-gradient(135deg, #d4a574 0%, #e9c891 100%);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 15px rgba(212, 165, 116, 0.4);
+      }
+
+      .reset-btn:hover {
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🌾 Las Semillas</h1>
+        <p class="scientific-name">Unidad de reproducción vegetal</p>
+      </div>
+
+      <div class="content">
+        <div class="image-container">
+          <img
+            src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800"
+            alt="Semillas"
+          />
+        </div>
+
+        <div class="info-section">
+          <h2>Sobre las Semillas</h2>
+          <p>
+            Las semillas son estructuras increíbles que contienen el embrión de
+            una nueva planta, junto con una reserva de nutrientes que le
+            permitirá crecer. Son la principal forma de reproducción de las
+            plantas con flores y coníferas.
+          </p>
+          <p>
+            Cada semilla es como una cápsula del tiempo que espera las
+            condiciones perfectas para germinar: humedad, temperatura adecuada y
+            a veces luz. Algunas semillas pueden permanecer viables durante
+            cientos o incluso miles de años.
+          </p>
+        </div>
+
+        <div class="facts-grid">
+          <div class="fact-card">
+            <div class="label">Viabilidad máxima</div>
+            <div class="value">+2000 años</div>
+          </div>
+          <div class="fact-card">
+            <div class="label">Tamaño</div>
+            <div class="value">0.2mm-30cm</div>
+          </div>
+          <div class="fact-card">
+            <div class="label">Especies plantas</div>
+            <div class="value">+350,000</div>
+          </div>
+          <div class="fact-card">
+            <div class="label">Germinación</div>
+            <div class="value">1-30 días</div>
+          </div>
+        </div>
+
+        <div class="curiosity-box">
+          <h3>💡 ¿Sabías que...?</h3>
+          <p>
+            Las semillas de loto pueden germinar después de estar inactivas por
+            más de 1,300 años. En 1994, científicos lograron germinar una
+            semilla de loto de 1,288 años de antigüedad. Además, la semilla más
+            grande del mundo es el coco de mar, que puede pesar hasta 25
+            kilogramos, mientras que las semillas de orquídeas son tan pequeñas
+            que parecen polvo.
+          </p>
+        </div>
+
+        <div class="info-section">
+          <h2>Importancia en la Biodiversidad</h2>
+          <p>
+            Las semillas son fundamentales para la supervivencia de los
+            ecosistemas terrestres. Muchos animales dependen de ellas como
+            fuente de alimento, y al comerlas, ayudan a dispersarlas a nuevas
+            áreas. Aves, roedores, murciélagos e incluso hormigas participan en
+            este proceso.
+          </p>
+          <p>
+            Los bancos de semillas mundiales preservan millones de variedades de
+            plantas para proteger la biodiversidad agrícola y silvestre. El más
+            famoso es el "Banco Mundial de Semillas" en Svalbard, Noruega, que
+            resguarda más de 1 millón de muestras de semillas.
+          </p>
+        </div>
+
+        <div class="quiz-section">
+          <h2>🎮 ¡Demuestra lo que aprendiste!</h2>
+
+          <div class="question" id="q1">
+            <h3>1. ¿Qué contiene una semilla?</h3>
+            <div class="options">
+              <div class="option" onclick="checkAnswer(1, 0, true)">
+                El embrión de una nueva planta
+              </div>
+              <div class="option" onclick="checkAnswer(1, 1, false)">
+                Solo agua y minerales
+              </div>
+              <div class="option" onclick="checkAnswer(1, 2, false)">
+                Células muertas
+              </div>
+            </div>
+          </div>
+
+          <div class="question" id="q2">
+            <h3>
+              2. ¿Cuánto tiempo pueden permanecer viables algunas semillas?
+            </h3>
+            <div class="options">
+              <div class="option" onclick="checkAnswer(2, 0, false)">
+                Solo 1 año
+              </div>
+              <div class="option" onclick="checkAnswer(2, 1, false)">
+                Máximo 10 años
+              </div>
+              <div class="option" onclick="checkAnswer(2, 2, true)">
+                Cientos o miles de años
+              </div>
+            </div>
+          </div>
+
+          <div class="question" id="q3">
+            <h3>3. ¿Cómo se dispersan las semillas en la naturaleza?</h3>
+            <div class="options">
+              <div class="option" onclick="checkAnswer(3, 0, false)">
+                Solo por el viento
+              </div>
+              <div class="option" onclick="checkAnswer(3, 1, true)">
+                Por viento, agua, y animales
+              </div>
+              <div class="option" onclick="checkAnswer(3, 2, false)">
+                No se dispersan, quedan en el suelo
+              </div>
+            </div>
+          </div>
+
+          <div class="score" id="quizScore"></div>
+          <button
+            class="reset-btn"
+            onclick="resetQuiz()"
+            style="display: none"
+            id="quizResetBtn"
+          >
+            Intentar de nuevo
+          </button>
+        </div>
+
+        <div class="quiz-section lifecycle-game">
+          <h2>🎯 Ciclo de Vida: Del Sembrado a la Planta</h2>
+          <div class="game-instructions">
+            Arrastra cada etapa al orden correcto del ciclo de vida de una
+            planta
+          </div>
+
+          <div class="stages-container">
+            <div class="stage-slot" data-order="1">
+              <div class="number">1</div>
+              <span class="description">Primera etapa</span>
+            </div>
+            <div class="stage-slot" data-order="2">
+              <div class="number">2</div>
+              <span class="description">Segunda etapa</span>
+            </div>
+            <div class="stage-slot" data-order="3">
+              <div class="number">3</div>
+              <span class="description">Tercera etapa</span>
+            </div>
+            <div class="stage-slot" data-order="4">
+              <div class="number">4</div>
+              <span class="description">Cuarta etapa</span>
+            </div>
+            <div class="stage-slot" data-order="5">
+              <div class="number">5</div>
+              <span class="description">Quinta etapa</span>
+            </div>
+          </div>
+
+          <div class="stage-options" id="stageOptions">
+            <div class="stage-item" draggable="true" data-order="3">
+              🌱 Plántula emerge
+            </div>
+            <div class="stage-item" draggable="true" data-order="5">
+              🌻 Planta produce semillas
+            </div>
+            <div class="stage-item" draggable="true" data-order="1">
+              🌾 Semilla en el suelo
+            </div>
+            <div class="stage-item" draggable="true" data-order="4">
+              🌿 Planta madura crece
+            </div>
+            <div class="stage-item" draggable="true" data-order="2">
+              💧 Germinación comienza
+            </div>
+          </div>
+
+          <div class="score" id="lifecycleScore">Etapas correctas: 0/5</div>
+          <button
+            class="reset-btn"
+            onclick="resetLifecycle()"
+            style="display: none"
+            id="lifecycleResetBtn"
+          >
+            Jugar de nuevo
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Quiz
+      let quizScore = 0;
+      let quizAnswered = 0;
+      const totalQuestions = 3;
+
+      function checkAnswer(questionNum, optionIndex, isCorrect) {
+        const question = document.getElementById('q' + questionNum);
+        const options = question.querySelectorAll('.option');
+
+        if (
+          options[optionIndex].classList.contains('correct') ||
+          options[optionIndex].classList.contains('incorrect')
+        ) {
+          return;
+        }
+
+        options.forEach((opt) => (opt.style.pointerEvents = 'none'));
+
+        if (isCorrect) {
+          options[optionIndex].classList.add('correct');
+          quizScore++;
+        } else {
+          options[optionIndex].classList.add('incorrect');
+          options.forEach((opt) => {
+            if (opt.onclick.toString().includes('true')) {
+              opt.classList.add('correct');
+            }
+          });
+        }
+
+        quizAnswered++;
+        updateQuizScore();
+      }
+
+      function updateQuizScore() {
+        const scoreDiv = document.getElementById('quizScore');
+        const resetBtn = document.getElementById('quizResetBtn');
+
+        if (quizAnswered === totalQuestions) {
+          const percentage = (quizScore / totalQuestions) * 100;
+          let message =
+            percentage === 100
+              ? '🎉 ¡Perfecto! ¡Eres un experto en semillas!'
+              : percentage >= 66
+              ? '👏 ¡Muy bien! Conoces mucho sobre semillas.'
+              : '🌾 ¡Sigue aprendiendo! Las semillas son increíbles.';
+
+          scoreDiv.innerHTML = `Puntuación: ${quizScore}/${totalQuestions}<br>${message}`;
+          resetBtn.style.display = 'block';
+        }
+      }
+
+      function resetQuiz() {
+        quizScore = 0;
+        quizAnswered = 0;
+
+        for (let i = 1; i <= totalQuestions; i++) {
+          const question = document.getElementById('q' + i);
+          const options = question.querySelectorAll('.option');
+          options.forEach((opt) => {
+            opt.classList.remove('correct', 'incorrect');
+            opt.style.pointerEvents = 'auto';
+          });
+        }
+
+        document.getElementById('quizScore').innerHTML = '';
+        document.getElementById('quizResetBtn').style.display = 'none';
+      }
+
+      // Lifecycle Game
+      let correctStages = 0;
+      let draggedStage = null;
+
+      const stageItems = document.querySelectorAll('.stage-item');
+      const stageSlots = document.querySelectorAll('.stage-slot');
+
+      stageItems.forEach((item) => {
+        item.addEventListener('dragstart', () => {
+          draggedStage = item;
+        });
+      });
+
+      stageSlots.forEach((slot) => {
+        slot.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          slot.classList.add('drag-over');
+        });
+
+        slot.addEventListener('dragleave', () => {
+          slot.classList.remove('drag-over');
+        });
+
+        slot.addEventListener('drop', (e) => {
+          e.preventDefault();
+          slot.classList.remove('drag-over');
+
+          if (slot.classList.contains('correct') || !draggedStage) return;
+
+          const slotOrder = slot.dataset.order;
+          const itemOrder = draggedStage.dataset.order;
+
+          if (slotOrder === itemOrder) {
+            slot.querySelector('.description').textContent =
+              draggedStage.textContent;
+            slot.classList.add('correct');
+            draggedStage.classList.add('used');
+            correctStages++;
+            updateLifecycleScore();
+          }
+
+          draggedStage = null;
+        });
+      });
+
+      function updateLifecycleScore() {
+        const scoreDiv = document.getElementById('lifecycleScore');
+        const resetBtn = document.getElementById('lifecycleResetBtn');
+
+        scoreDiv.textContent = `Etapas correctas: ${correctStages}/5`;
+
+        if (correctStages === 5) {
+          scoreDiv.innerHTML +=
+            '<br>🎊 ¡Excelente! ¡Ordenaste todo el ciclo correctamente!';
+          resetBtn.style.display = 'block';
+        }
+      }
+
+      function resetLifecycle() {
+        correctStages = 0;
+
+        stageSlots.forEach((slot) => {
+          slot.classList.remove('correct');
+          slot.querySelector('.description').textContent =
+            slot.querySelector('.number').textContent === '1'
+              ? 'Primera etapa'
+              : slot.querySelector('.number').textContent === '2'
+              ? 'Segunda etapa'
+              : slot.querySelector('.number').textContent === '3'
+              ? 'Tercera etapa'
+              : slot.querySelector('.number').textContent === '4'
+              ? 'Cuarta etapa'
+              : 'Quinta etapa';
+        });
+
+        stageItems.forEach((item) => item.classList.remove('used'));
+
+        document.getElementById('lifecycleScore').textContent =
+          'Etapas correctas: 0/5';
+        document.getElementById('lifecycleResetBtn').style.display = 'none';
+      }
+    </script>
+  </body>
+</html>

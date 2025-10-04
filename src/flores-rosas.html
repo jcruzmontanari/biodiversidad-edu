@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flores Rosas - Biodiversidad</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 0.6s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .header {
+        background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        padding: 40px 30px;
+        color: white;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .scientific-name {
+        font-style: italic;
+        font-size: 1.2em;
+        opacity: 0.95;
+      }
+
+      .content {
+        padding: 30px;
+      }
+
+      .image-container {
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .image-container img {
+        max-width: 100%;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .info-section {
+        margin: 30px 0;
+      }
+
+      .info-section h2 {
+        color: #ff6b9d;
+        margin-bottom: 15px;
+        font-size: 1.8em;
+        border-left: 4px solid #ffa8c5;
+        padding-left: 15px;
+      }
+
+      .info-section p {
+        line-height: 1.8;
+        color: #333;
+        font-size: 1.1em;
+        margin-bottom: 15px;
+      }
+
+      .facts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+      }
+
+      .fact-card {
+        background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        transform: translateY(0);
+        transition: transform 0.3s ease;
+      }
+
+      .fact-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .fact-card .label {
+        font-size: 0.9em;
+        opacity: 0.95;
+        margin-bottom: 5px;
+      }
+
+      .fact-card .value {
+        font-size: 1.4em;
+        font-weight: bold;
+      }
+
+      .curiosity-box {
+        background: #fff5f8;
+        border-left: 4px solid #ff6b9d;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+      }
+
+      .curiosity-box h3 {
+        color: #ff6b9d;
+        margin-bottom: 10px;
+      }
+
+      .quiz-section {
+        background: #fff5f8;
+        padding: 30px;
+        border-radius: 15px;
+        margin-top: 30px;
+      }
+
+      .quiz-section h2 {
+        color: #ff6b9d;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .question {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .question h3 {
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .option {
+        padding: 15px;
+        background: white;
+        border: 2px solid #ffd4e5;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .option:hover {
+        border-color: #ff6b9d;
+        background: #fff5f8;
+      }
+
+      .option.correct {
+        background: #4caf50;
+        color: white;
+        border-color: #4caf50;
+        animation: pulse 0.5s;
+      }
+
+      .option.incorrect {
+        background: #f44336;
+        color: white;
+        border-color: #f44336;
+        animation: shake 0.5s;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-10px);
+        }
+        75% {
+          transform: translateX(10px);
+        }
+      }
+
+      .matching-game {
+        margin-top: 30px;
+      }
+
+      .matching-pairs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .match-column h4 {
+        text-align: center;
+        color: #ff6b9d;
+        margin-bottom: 15px;
+      }
+
+      .match-item {
+        padding: 15px;
+        background: white;
+        border: 2px solid #ffd4e5;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+      }
+
+      .match-item:hover {
+        border-color: #ff6b9d;
+        transform: translateX(5px);
+      }
+
+      .match-item.selected {
+        background: #ff6b9d;
+        color: white;
+        border-color: #ff6b9d;
+      }
+
+      .match-item.matched {
+        background: #4caf50;
+        color: white;
+        border-color: #4caf50;
+        pointer-events: none;
+      }
+
+      .score {
+        text-align: center;
+        font-size: 1.5em;
+        color: #ff6b9d;
+        margin-top: 20px;
+        font-weight: bold;
+      }
+
+      .reset-btn {
+        display: block;
+        margin: 20px auto;
+        padding: 15px 40px;
+        background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+      }
+
+      .reset-btn:hover {
+        transform: scale(1.05);
+      }
+
+      .game-instructions {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🌹 Flores Rosas</h1>
+        <p class="scientific-name">Rosa spp.</p>
+      </div>
+
+      <div class="content">
+        <div class="image-container">
+          <img
+            src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=800"
+            alt="Flores Rosas"
+          />
+        </div>
+
+        <div class="info-section">
+          <h2>Sobre las Rosas</h2>
+          <p>
+            Las rosas son flores icónicas pertenecientes al género Rosa, con más
+            de 300 especies diferentes en todo el mundo. Son conocidas por su
+            belleza, fragancia y la gran variedad de colores en que se
+            presentan.
+          </p>
+          <p>
+            Estas plantas tienen tallos espinosos y hojas compuestas. Las rosas
+            silvestres suelen tener cinco pétalos, mientras que las cultivadas
+            pueden tener docenas de pétalos en formaciones complejas y hermosas.
+          </p>
+        </div>
+
+        <div class="facts-grid">
+          <div class="fact-card">
+            <div class="label">Especies</div>
+            <div class="value">+300</div>
+          </div>
+          <div class="fact-card">
+            <div class="label">Pétalos</div>
+            <div class="value">5-40+</div>
+          </div>
+          <div class="fact-card">
+            <div class="label">Origen</div>
+            <div class="value">Asia</div>
+          </div>
+          <div class="fact-card">
+            <div class="label">Cultivo</div>
+            <div class="value">5000+ años</div>
+          </div>
+        </div>
+
+        <div class="curiosity-box">
+          <h3>💡 ¿Sabías que...?</h3>
+          <p>
+            Las rosas no solo son hermosas, también son comestibles. Sus pétalos
+            se usan para hacer mermeladas, tés y aceites esenciales. En la
+            antigua Roma, los pétalos de rosa se esparcían en las celebraciones
+            importantes.
+          </p>
+        </div>
+
+        <div class="info-section">
+          <h2>Importancia en la Biodiversidad</h2>
+          <p>
+            Las rosas silvestres son fundamentales para muchos polinizadores
+            como abejas, mariposas y escarabajos. Sus frutos, llamados
+            escaramujos, son ricos en vitamina C y alimentan a aves durante el
+            invierno.
+          </p>
+          <p>
+            En jardines naturales, las rosas proporcionan refugio para insectos
+            beneficiosos y ayudan a mantener ecosistemas saludables. Sus raíces
+            previenen la erosión del suelo.
+          </p>
+        </div>
+
+        <div class="quiz-section">
+          <h2>🎮 ¡Demuestra lo que aprendiste!</h2>
+
+          <div class="question" id="q1">
+            <h3>1. ¿Cuántas especies de rosas existen aproximadamente?</h3>
+            <div class="options">
+              <div class="option" onclick="checkAnswer(1, 0, false)">
+                50 especies
+              </div>
+              <div class="option" onclick="checkAnswer(1, 1, true)">
+                Más de 300 especies
+              </div>
+              <div class="option" onclick="checkAnswer(1, 2, false)">
+                1000 especies
+              </div>
+            </div>
+          </div>
+
+          <div class="question" id="q2">
+            <h3>2. ¿Qué parte de la rosa es comestible?</h3>
+            <div class="options">
+              <div class="option" onclick="checkAnswer(2, 0, false)">
+                Solo las espinas
+              </div>
+              <div class="option" onclick="checkAnswer(2, 1, true)">
+                Los pétalos
+              </div>
+              <div class="option" onclick="checkAnswer(2, 2, false)">
+                Las raíces
+              </div>
+            </div>
+          </div>
+
+          <div class="question" id="q3">
+            <h3>3. ¿Cómo se llaman los frutos de las rosas?</h3>
+            <div class="options">
+              <div class="option" onclick="checkAnswer(3, 0, false)">
+                Roseños
+              </div>
+              <div class="option" onclick="checkAnswer(3, 1, false)">
+                Rosetas
+              </div>
+              <div class="option" onclick="checkAnswer(3, 2, true)">
+                Escaramujos
+              </div>
+            </div>
+          </div>
+
+          <div class="score" id="quizScore"></div>
+          <button
+            class="reset-btn"
+            onclick="resetQuiz()"
+            style="display: none"
+            id="quizResetBtn"
+          >
+            Intentar de nuevo
+          </button>
+        </div>
+
+        <div class="quiz-section matching-game">
+          <h2>🎯 Juego de Asociación</h2>
+          <div class="game-instructions">
+            Conecta cada parte de la rosa con su función. ¡Haz clic en uno de
+            cada columna!
+          </div>
+
+          <div class="matching-pairs">
+            <div class="match-column">
+              <h4>Parte de la Rosa</h4>
+              <div
+                class="match-item"
+                data-id="petals"
+                onclick="selectMatch('left', 'petals', this)"
+              >
+                Pétalos
+              </div>
+              <div
+                class="match-item"
+                data-id="thorns"
+                onclick="selectMatch('left', 'thorns', this)"
+              >
+                Espinas
+              </div>
+              <div
+                class="match-item"
+                data-id="roots"
+                onclick="selectMatch('left', 'roots', this)"
+              >
+                Raíces
+              </div>
+              <div
+                class="match-item"
+                data-id="fruit"
+                onclick="selectMatch('left', 'fruit', this)"
+              >
+                Escaramujos
+              </div>
+            </div>
+
+            <div class="match-column">
+              <h4>Función</h4>
+              <div
+                class="match-item"
+                data-id="thorns"
+                onclick="selectMatch('right', 'thorns', this)"
+              >
+                Protección contra herbívoros
+              </div>
+              <div
+                class="match-item"
+                data-id="petals"
+                onclick="selectMatch('right', 'petals', this)"
+              >
+                Atraer polinizadores
+              </div>
+              <div
+                class="match-item"
+                data-id="fruit"
+                onclick="selectMatch('right', 'fruit', this)"
+              >
+                Alimentar aves
+              </div>
+              <div
+                class="match-item"
+                data-id="roots"
+                onclick="selectMatch('right', 'roots', this)"
+              >
+                Absorber agua y nutrientes
+              </div>
+            </div>
+          </div>
+
+          <div class="score" id="matchScore"></div>
+          <button
+            class="reset-btn"
+            onclick="resetMatching()"
+            style="display: none"
+            id="matchResetBtn"
+          >
+            Jugar de nuevo
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Quiz variables
+      let quizScore = 0;
+      let quizAnswered = 0;
+      const totalQuestions = 3;
+
+      function checkAnswer(questionNum, optionIndex, isCorrect) {
+        const question = document.getElementById('q' + questionNum);
+        const options = question.querySelectorAll('.option');
+
+        if (
+          options[optionIndex].classList.contains('correct') ||
+          options[optionIndex].classList.contains('incorrect')
+        ) {
+          return;
+        }
+
+        options.forEach((opt) => {
+          opt.style.pointerEvents = 'none';
+        });
+
+        if (isCorrect) {
+          options[optionIndex].classList.add('correct');
+          quizScore++;
+        } else {
+          options[optionIndex].classList.add('incorrect');
+          options.forEach((opt) => {
+            if (opt.onclick.toString().includes('true')) {
+              opt.classList.add('correct');
+            }
+          });
+        }
+
+        quizAnswered++;
+        updateQuizScore();
+      }
+
+      function updateQuizScore() {
+        const scoreDiv = document.getElementById('quizScore');
+        const resetBtn = document.getElementById('quizResetBtn');
+
+        if (quizAnswered === totalQuestions) {
+          const percentage = (quizScore / totalQuestions) * 100;
+          let message = '';
+
+          if (percentage === 100) {
+            message = '🎉 ¡Perfecto! ¡Eres un experto en rosas!';
+          } else if (percentage >= 66) {
+            message = '👏 ¡Muy bien! Sabes mucho sobre flores.';
+          } else {
+            message = '🌹 ¡Sigue aprendiendo! Las rosas son fascinantes.';
+          }
+
+          scoreDiv.innerHTML = `Puntuación: ${quizScore}/${totalQuestions}<br>${message}`;
+          resetBtn.style.display = 'block';
+        }
+      }
+
+      function resetQuiz() {
+        quizScore = 0;
+        quizAnswered = 0;
+
+        for (let i = 1; i <= totalQuestions; i++) {
+          const question = document.getElementById('q' + i);
+          const options = question.querySelectorAll('.option');
+          options.forEach((opt) => {
+            opt.classList.remove('correct', 'incorrect');
+            opt.style.pointerEvents = 'auto';
+          });
+        }
+
+        document.getElementById('quizScore').innerHTML = '';
+        document.getElementById('quizResetBtn').style.display = 'none';
+      }
+
+      // Matching game variables
+      let selectedLeft = null;
+      let selectedRight = null;
+      let matchedPairs = 0;
+      const totalPairs = 4;
+
+      function selectMatch(side, id, element) {
+        if (element.classList.contains('matched')) return;
+
+        if (side === 'left') {
+          if (selectedLeft) {
+            selectedLeft.classList.remove('selected');
+          }
+          selectedLeft = element;
+          element.classList.add('selected');
+        } else {
+          if (selectedRight) {
+            selectedRight.classList.remove('selected');
+          }
+          selectedRight = element;
+          element.classList.add('selected');
+        }
+
+        if (selectedLeft && selectedRight) {
+          checkMatch();
+        }
+      }
+
+      function checkMatch() {
+        const leftId = selectedLeft.dataset.id;
+        const rightId = selectedRight.dataset.id;
+
+        if (leftId === rightId) {
+          selectedLeft.classList.add('matched');
+          selectedRight.classList.add('matched');
+          selectedLeft.classList.remove('selected');
+          selectedRight.classList.remove('selected');
+          matchedPairs++;
+
+          updateMatchScore();
+        }
+
+        selectedLeft = null;
+        selectedRight = null;
+      }
+
+      function updateMatchScore() {
+        const scoreDiv = document.getElementById('matchScore');
+        const resetBtn = document.getElementById('matchResetBtn');
+
+        if (matchedPairs === totalPairs) {
+          scoreDiv.innerHTML =
+            '🎊 ¡Excelente! ¡Conectaste todas las parejas correctamente!';
+          resetBtn.style.display = 'block';
+        } else {
+          scoreDiv.innerHTML = `Parejas conectadas: ${matchedPairs}/${totalPairs}`;
+        }
+      }
+
+      function resetMatching() {
+        matchedPairs = 0;
+        selectedLeft = null;
+        selectedRight = null;
+
+        const allItems = document.querySelectorAll('.match-item');
+        allItems.forEach((item) => {
+          item.classList.remove('matched', 'selected');
+        });
+
+        document.getElementById('matchScore').innerHTML = '';
+        document.getElementById('matchResetBtn').style.display = 'none';
+      }
+    </script>
+  </body>
+</html>
