@@ -326,6 +326,122 @@
       .reset-btn:hover {
         transform: scale(1.05);
       }
+
+      /* Slicer Game Styles */
+      .slicer-game {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .slicer-game h3 {
+        color: #f6a41b;
+        text-align: center;
+        margin-bottom: 15px;
+      }
+
+      .game-area {
+        position: relative;
+        height: 300px;
+        background: linear-gradient(180deg, #87ceeb 0%, #98d8e8 100%);
+        border-radius: 10px;
+        overflow: hidden;
+        border: 3px solid #f6d365;
+        cursor: crosshair;
+      }
+
+      .falling-pineapple {
+        position: absolute;
+        font-size: 3em;
+        cursor: pointer;
+        transition: transform 0.1s ease;
+        user-select: none;
+      }
+
+      .falling-pineapple:hover {
+        transform: scale(1.2);
+      }
+
+      .falling-pineapple.sliced {
+        animation: sliceEffect 0.5s ease-out;
+      }
+
+      @keyframes sliceEffect {
+        0% {
+          transform: scale(1) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(0.5) rotate(180deg);
+          opacity: 0;
+        }
+      }
+
+      .game-controls {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .game-stat-box {
+        background: #fff8e7;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-align: center;
+        min-width: 100px;
+      }
+
+      .game-stat-box .stat-label {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      .game-stat-box .stat-value {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #f6a41b;
+      }
+
+      .start-game-btn {
+        padding: 12px 30px;
+        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+        color: white;
+        border: none;
+        border-radius: 20px;
+        font-size: 1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 10px rgba(246, 164, 27, 0.3);
+      }
+
+      .start-game-btn:hover {
+        transform: scale(1.05);
+      }
+
+      .start-game-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .game-over-message {
+        text-align: center;
+        padding: 20px;
+        background: #fff8e7;
+        border-radius: 10px;
+        margin-top: 15px;
+        display: none;
+      }
+
+      .game-over-message h4 {
+        color: #f6a41b;
+        margin-bottom: 10px;
+      }
     </style>
   </head>
   <body>
@@ -336,6 +452,46 @@
       </div>
 
       <div class="content">
+        <div class="slicer-game">
+          <h3>Juego: ¡Cosecha las Piñas!</h3>
+          <div class="game-instructions">
+            ¡Haz clic en las piñas que caen antes de que lleguen al suelo!
+            Tienes 30 segundos. ¡Evita las bombas 💣!
+          </div>
+
+          <div class="game-area" id="gameArea"></div>
+
+          <div class="game-controls">
+            <div class="game-stat-box">
+              <div class="stat-label">Puntos</div>
+              <div class="stat-value" id="slicerScore">0</div>
+            </div>
+            <div class="game-stat-box">
+              <div class="stat-label">Tiempo</div>
+              <div class="stat-value" id="slicerTime">30</div>
+            </div>
+            <div class="game-stat-box">
+              <div class="stat-label">Piñas cosechadas</div>
+              <div class="stat-value" id="slicerCount">0</div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 15px">
+            <button
+              class="start-game-btn"
+              id="startSlicerBtn"
+              onclick="startSlicerGame()"
+            >
+              Iniciar Juego
+            </button>
+          </div>
+
+          <div class="game-over-message" id="gameOverMessage">
+            <h4>🎉 ¡Juego Terminado!</h4>
+            <p id="finalScoreMessage"></p>
+          </div>
+        </div>
+
         <div class="image-container">
           <img
             src="https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=800"
@@ -667,6 +823,132 @@
 
         document.getElementById('dragScore').innerHTML = '';
         document.getElementById('dragResetBtn').style.display = 'none';
+      }
+
+      // Slicer Game
+      let slicerScore = 0;
+      let slicerTime = 30;
+      let slicerCount = 0;
+      let slicerGameActive = false;
+      let slicerTimer = null;
+      let spawnInterval = null;
+
+      function startSlicerGame() {
+        // Reset
+        slicerScore = 0;
+        slicerTime = 30;
+        slicerCount = 0;
+        slicerGameActive = true;
+
+        document.getElementById('slicerScore').textContent = '0';
+        document.getElementById('slicerTime').textContent = '30';
+        document.getElementById('slicerCount').textContent = '0';
+        document.getElementById('gameOverMessage').style.display = 'none';
+        document.getElementById('startSlicerBtn').disabled = true;
+        document.getElementById('gameArea').innerHTML = '';
+
+        // Timer countdown
+        slicerTimer = setInterval(() => {
+          slicerTime--;
+          document.getElementById('slicerTime').textContent = slicerTime;
+
+          if (slicerTime <= 0) {
+            endSlicerGame();
+          }
+        }, 1000);
+
+        // Spawn pineapples
+        spawnInterval = setInterval(spawnFallingItem, 800);
+      }
+
+      function spawnFallingItem() {
+        if (!slicerGameActive) return;
+
+        const gameArea = document.getElementById('gameArea');
+        const item = document.createElement('div');
+        item.className = 'falling-pineapple';
+
+        // 15% chance of bomb, 85% pineapple
+        const isBomb = Math.random() < 0.15;
+        item.textContent = isBomb ? '💣' : '🍍';
+        item.dataset.type = isBomb ? 'bomb' : 'pineapple';
+
+        // Random horizontal position
+        const leftPosition = Math.random() * (gameArea.offsetWidth - 60);
+        item.style.left = leftPosition + 'px';
+        item.style.top = '-60px';
+
+        gameArea.appendChild(item);
+
+        // Click handler
+        item.addEventListener('click', () => {
+          if (!slicerGameActive) return;
+
+          if (item.dataset.type === 'pineapple') {
+            slicerScore += 10;
+            slicerCount++;
+            document.getElementById('slicerScore').textContent = slicerScore;
+            document.getElementById('slicerCount').textContent = slicerCount;
+          } else {
+            // Hit bomb - penalty
+            slicerScore = Math.max(0, slicerScore - 20);
+            document.getElementById('slicerScore').textContent = slicerScore;
+          }
+
+          item.classList.add('sliced');
+          setTimeout(() => item.remove(), 500);
+        });
+
+        // Falling animation
+        let topPosition = -60;
+        const fallSpeed = 2 + Math.random() * 2; // Variable speed
+        const fallInterval = setInterval(() => {
+          if (!slicerGameActive) {
+            clearInterval(fallInterval);
+            item.remove();
+            return;
+          }
+
+          topPosition += fallSpeed;
+          item.style.top = topPosition + 'px';
+
+          // Remove if it reaches bottom
+          if (topPosition > gameArea.offsetHeight) {
+            clearInterval(fallInterval);
+            item.remove();
+
+            // Penalty for missing pineapple
+            if (item.dataset.type === 'pineapple') {
+              slicerScore = Math.max(0, slicerScore - 5);
+              document.getElementById('slicerScore').textContent = slicerScore;
+            }
+          }
+        }, 30);
+      }
+
+      function endSlicerGame() {
+        slicerGameActive = false;
+        clearInterval(slicerTimer);
+        clearInterval(spawnInterval);
+
+        document.getElementById('startSlicerBtn').disabled = false;
+        document.getElementById('gameArea').innerHTML = '';
+
+        // Show results
+        const gameOverMsg = document.getElementById('gameOverMessage');
+        const finalMsg = document.getElementById('finalScoreMessage');
+
+        let message = '';
+        if (slicerScore >= 200) {
+          message = `¡Increíble! Cosechaste ${slicerCount} piñas con ${slicerScore} puntos. ¡Eres un experto agricultor! 🏆`;
+        } else if (slicerScore >= 100) {
+          message = `¡Muy bien! Cosechaste ${slicerCount} piñas con ${slicerScore} puntos. ¡Buen trabajo! 👏`;
+        } else {
+          message = `Cosechaste ${slicerCount} piñas con ${slicerScore} puntos. ¡Sigue practicando! 💪`;
+        }
+
+        finalMsg.textContent = message;
+        gameOverMsg.style.display = 'block';
       }
     </script>
   </body>
