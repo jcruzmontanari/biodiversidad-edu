@@ -62,6 +62,137 @@
         padding: 30px;
       }
 
+      /* Feather Catch Game */
+      .feather-game {
+        margin-bottom: 30px;
+      }
+
+      .feather-game-area {
+        position: relative;
+        height: 300px;
+        background: linear-gradient(180deg, #a8edea 0%, #fed6e3 100%);
+        border-radius: 10px;
+        overflow: hidden;
+        border: 3px solid #667eea;
+        cursor: crosshair;
+      }
+
+      .falling-item {
+        position: absolute;
+        font-size: 3em;
+        cursor: pointer;
+        transition: transform 0.1s ease;
+        user-select: none;
+      }
+
+      .falling-item:hover {
+        transform: scale(1.2);
+      }
+
+      .falling-item.clicked {
+        animation: featherEffect 0.5s ease-out;
+      }
+
+      @keyframes featherEffect {
+        0% {
+          transform: scale(1) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(0.5) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .game-controls {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .game-stat-box {
+        background: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-align: center;
+        min-width: 100px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .game-stat-box .stat-label {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      .game-stat-box .stat-value {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #667eea;
+      }
+
+      .start-game-btn {
+        padding: 12px 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 20px;
+        font-size: 1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+      }
+
+      .start-game-btn:hover {
+        transform: scale(1.05);
+      }
+
+      .start-game-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .game-over-message {
+        text-align: center;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        margin-top: 15px;
+        display: none;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .game-over-message h4 {
+        color: #667eea;
+        margin-bottom: 10px;
+      }
+
+      @media (max-width: 768px) {
+        .feather-game {
+          padding: 15px;
+          margin-left: -15px;
+          margin-right: -15px;
+          border-radius: 0;
+          margin-bottom: 15px;
+        }
+
+        .feather-game-area {
+          height: 250px;
+        }
+
+        .game-controls {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .game-stat-box {
+          width: 100%;
+        }
+      }
+
       .image-container {
         text-align: center;
         margin: 20px 0;
@@ -356,6 +487,48 @@
       </div>
 
       <div class="content">
+        <div class="quiz-section feather-game">
+          <h3 style="color: #667eea; text-align: center; margin-bottom: 15px">
+            Juego: ¡Atrapa las Plumas! 🪶
+          </h3>
+          <div class="game-instructions">
+            ¡Haz clic en las plumas que caen para recolectarlas! Tienes 30
+            segundos. ¡Evita otros objetos 🪨!
+          </div>
+
+          <div class="feather-game-area" id="featherGameArea"></div>
+
+          <div class="game-controls">
+            <div class="game-stat-box">
+              <div class="stat-label">Puntos</div>
+              <div class="stat-value" id="featherScore">0</div>
+            </div>
+            <div class="game-stat-box">
+              <div class="stat-label">Tiempo</div>
+              <div class="stat-value" id="featherTime">30</div>
+            </div>
+            <div class="game-stat-box">
+              <div class="stat-label">Plumas recolectadas</div>
+              <div class="stat-value" id="featherCount">0</div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 15px">
+            <button
+              class="start-game-btn"
+              id="startFeatherBtn"
+              onclick="startFeatherGame()"
+            >
+              Iniciar Juego
+            </button>
+          </div>
+
+          <div class="game-over-message" id="featherGameOverMessage">
+            <h4>🎉 ¡Juego Terminado!</h4>
+            <p id="featherFinalScoreMessage"></p>
+          </div>
+        </div>
+
         <div class="image-container">
           <img
             src="https://images.unsplash.com/photo-1582126892740-ded83a5bb861?w=800"
@@ -586,6 +759,123 @@
     </div>
 
     <script>
+      // Feather Catch Game
+      let featherScore = 0;
+      let featherTime = 30;
+      let featherCount = 0;
+      let featherGameActive = false;
+      let featherTimer = null;
+      let featherSpawnInterval = null;
+
+      function startFeatherGame() {
+        featherScore = 0;
+        featherTime = 30;
+        featherCount = 0;
+        featherGameActive = true;
+
+        document.getElementById('featherScore').textContent = '0';
+        document.getElementById('featherTime').textContent = '30';
+        document.getElementById('featherCount').textContent = '0';
+        document.getElementById('featherGameOverMessage').style.display =
+          'none';
+        document.getElementById('startFeatherBtn').disabled = true;
+        document.getElementById('featherGameArea').innerHTML = '';
+
+        featherTimer = setInterval(() => {
+          featherTime--;
+          document.getElementById('featherTime').textContent = featherTime;
+
+          if (featherTime <= 0) {
+            endFeatherGame();
+          }
+        }, 1000);
+
+        featherSpawnInterval = setInterval(spawnFallingFeatherItem, 800);
+      }
+
+      function spawnFallingFeatherItem() {
+        if (!featherGameActive) return;
+
+        const gameArea = document.getElementById('featherGameArea');
+        const item = document.createElement('div');
+        item.className = 'falling-item';
+
+        const isRock = Math.random() < 0.25;
+        item.textContent = isRock ? '🪨' : '🪶';
+        item.dataset.type = isRock ? 'rock' : 'feather';
+
+        const leftPosition = Math.random() * (gameArea.offsetWidth - 60);
+        item.style.left = leftPosition + 'px';
+        item.style.top = '-60px';
+
+        gameArea.appendChild(item);
+
+        item.addEventListener('click', () => {
+          if (!featherGameActive) return;
+
+          if (item.dataset.type === 'feather') {
+            featherScore += 10;
+            featherCount++;
+            document.getElementById('featherScore').textContent = featherScore;
+            document.getElementById('featherCount').textContent = featherCount;
+          } else {
+            featherScore = Math.max(0, featherScore - 15);
+            document.getElementById('featherScore').textContent = featherScore;
+          }
+
+          item.classList.add('clicked');
+          setTimeout(() => item.remove(), 500);
+        });
+
+        let topPosition = -60;
+        const fallSpeed = 2 + Math.random() * 2;
+        const fallInterval = setInterval(() => {
+          if (!featherGameActive) {
+            clearInterval(fallInterval);
+            item.remove();
+            return;
+          }
+
+          topPosition += fallSpeed;
+          item.style.top = topPosition + 'px';
+
+          if (topPosition > gameArea.offsetHeight) {
+            clearInterval(fallInterval);
+            item.remove();
+
+            if (item.dataset.type === 'feather') {
+              featherScore = Math.max(0, featherScore - 5);
+              document.getElementById('featherScore').textContent =
+                featherScore;
+            }
+          }
+        }, 30);
+      }
+
+      function endFeatherGame() {
+        featherGameActive = false;
+        clearInterval(featherTimer);
+        clearInterval(featherSpawnInterval);
+
+        document.getElementById('startFeatherBtn').disabled = false;
+        document.getElementById('featherGameArea').innerHTML = '';
+
+        const gameOverMsg = document.getElementById('featherGameOverMessage');
+        const finalMsg = document.getElementById('featherFinalScoreMessage');
+
+        let message = '';
+        if (featherScore >= 200) {
+          message = `¡Increíble! Recolectaste ${featherCount} plumas con ${featherScore} puntos. ¡Eres un experto colector! 🏆`;
+        } else if (featherScore >= 100) {
+          message = `¡Muy bien! Recolectaste ${featherCount} plumas con ${featherScore} puntos. ¡Buen trabajo! 👏`;
+        } else {
+          message = `Recolectaste ${featherCount} plumas con ${featherScore} puntos. ¡Sigue practicando! 💪`;
+        }
+
+        finalMsg.textContent = message;
+        gameOverMsg.style.display = 'block';
+      }
+
       // Quiz
       let quizScore = 0;
       let quizAnswered = 0;

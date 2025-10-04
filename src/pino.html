@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Piña - Biodiversidad</title>
+    <title>Pino - Biodiversidad</title>
     <style>
       * {
         margin: 0;
@@ -13,7 +13,7 @@
 
       body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+        background: linear-gradient(135deg, #2d5016 0%, #61892f 100%);
         min-height: 100vh;
         padding: 20px;
       }
@@ -40,7 +40,7 @@
       }
 
       .header {
-        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+        background: linear-gradient(135deg, #2d5016 0%, #61892f 100%);
         padding: 40px 30px;
         color: white;
         text-align: center;
@@ -78,10 +78,10 @@
       }
 
       .info-section h2 {
-        color: #f6a41b;
+        color: #2d5016;
         margin-bottom: 15px;
         font-size: 1.8em;
-        border-left: 4px solid #fda085;
+        border-left: 4px solid #61892f;
         padding-left: 15px;
       }
 
@@ -100,7 +100,7 @@
       }
 
       .fact-card {
-        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+        background: linear-gradient(135deg, #2d5016 0%, #61892f 100%);
         color: white;
         padding: 20px;
         border-radius: 15px;
@@ -125,27 +125,27 @@
       }
 
       .curiosity-box {
-        background: #fff8e7;
-        border-left: 4px solid #f6a41b;
+        background: #f0f7ed;
+        border-left: 4px solid #2d5016;
         padding: 20px;
         border-radius: 10px;
         margin: 20px 0;
       }
 
       .curiosity-box h3 {
-        color: #f6a41b;
+        color: #2d5016;
         margin-bottom: 10px;
       }
 
       .quiz-section {
-        background: #fff8e7;
+        background: #f0f7ed;
         padding: 30px;
         border-radius: 15px;
         margin-top: 30px;
       }
 
       .quiz-section h2 {
-        color: #f6a41b;
+        color: #2d5016;
         margin-bottom: 20px;
         text-align: center;
       }
@@ -172,15 +172,15 @@
       .option {
         padding: 15px;
         background: white;
-        border: 2px solid #ffe4b3;
+        border: 2px solid #d4e7c5;
         border-radius: 8px;
         cursor: pointer;
         transition: all 0.3s ease;
       }
 
       .option:hover {
-        border-color: #f6a41b;
-        background: #fff8e7;
+        border-color: #2d5016;
+        background: #f0f7ed;
       }
 
       .option.correct {
@@ -220,7 +220,7 @@
         }
       }
 
-      .drag-drop-game {
+      .cone-game {
         margin-top: 30px;
       }
 
@@ -233,6 +233,111 @@
         color: #666;
       }
 
+      .game-area {
+        position: relative;
+        height: 300px;
+        background: linear-gradient(180deg, #87ceeb 0%, #98d8e8 100%);
+        border-radius: 10px;
+        overflow: hidden;
+        border: 3px solid #2d5016;
+        cursor: crosshair;
+      }
+
+      .falling-cone {
+        position: absolute;
+        font-size: 3em;
+        cursor: pointer;
+        transition: transform 0.1s ease;
+        user-select: none;
+      }
+
+      .falling-cone:hover {
+        transform: scale(1.2);
+      }
+
+      .falling-cone.collected {
+        animation: collectEffect 0.5s ease-out;
+      }
+
+      @keyframes collectEffect {
+        0% {
+          transform: scale(1) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(0.5) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .game-controls {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .game-stat-box {
+        background: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-align: center;
+        min-width: 100px;
+      }
+
+      .game-stat-box .stat-label {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      .game-stat-box .stat-value {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #2d5016;
+      }
+
+      .start-game-btn {
+        padding: 12px 30px;
+        background: linear-gradient(135deg, #2d5016 0%, #61892f 100%);
+        color: white;
+        border: none;
+        border-radius: 20px;
+        font-size: 1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 10px rgba(45, 80, 22, 0.3);
+      }
+
+      .start-game-btn:hover {
+        transform: scale(1.05);
+      }
+
+      .start-game-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .game-over-message {
+        text-align: center;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        margin-top: 15px;
+        display: none;
+      }
+
+      .game-over-message h4 {
+        color: #2d5016;
+        margin-bottom: 10px;
+      }
+
+      .drag-drop-game {
+        margin-top: 30px;
+      }
+
       .parts-container {
         display: flex;
         justify-content: space-around;
@@ -243,7 +348,7 @@
 
       .draggable {
         padding: 15px 25px;
-        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+        background: linear-gradient(135deg, #2d5016 0%, #61892f 100%);
         color: white;
         border-radius: 10px;
         cursor: move;
@@ -268,7 +373,7 @@
       .drop-zone {
         padding: 20px;
         background: white;
-        border: 3px dashed #ffe4b3;
+        border: 3px dashed #d4e7c5;
         border-radius: 10px;
         min-height: 80px;
         display: flex;
@@ -278,8 +383,8 @@
       }
 
       .drop-zone.drag-over {
-        border-color: #f6a41b;
-        background: #fff8e7;
+        border-color: #2d5016;
+        background: #f0f7ed;
       }
 
       .drop-zone.correct {
@@ -295,7 +400,7 @@
 
       .drop-zone .dropped-item {
         padding: 10px 20px;
-        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+        background: linear-gradient(135deg, #2d5016 0%, #61892f 100%);
         color: white;
         border-radius: 8px;
         font-weight: bold;
@@ -304,7 +409,7 @@
       .score {
         text-align: center;
         font-size: 1.5em;
-        color: #f6a41b;
+        color: #2d5016;
         margin-top: 20px;
         font-weight: bold;
       }
@@ -313,134 +418,18 @@
         display: block;
         margin: 20px auto;
         padding: 15px 40px;
-        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+        background: linear-gradient(135deg, #2d5016 0%, #61892f 100%);
         color: white;
         border: none;
         border-radius: 25px;
         font-size: 1.1em;
         cursor: pointer;
         transition: transform 0.3s ease;
-        box-shadow: 0 4px 15px rgba(246, 164, 27, 0.4);
+        box-shadow: 0 4px 15px rgba(45, 80, 22, 0.4);
       }
 
       .reset-btn:hover {
         transform: scale(1.05);
-      }
-
-      /* Slicer Game Styles */
-      .slicer-game {
-        background: white;
-        padding: 20px;
-        border-radius: 15px;
-        margin-bottom: 30px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      }
-
-      .slicer-game h3 {
-        color: #f6a41b;
-        text-align: center;
-        margin-bottom: 15px;
-      }
-
-      .game-area {
-        position: relative;
-        height: 300px;
-        background: linear-gradient(180deg, #87ceeb 0%, #98d8e8 100%);
-        border-radius: 10px;
-        overflow: hidden;
-        border: 3px solid #f6d365;
-        cursor: crosshair;
-      }
-
-      .falling-pineapple {
-        position: absolute;
-        font-size: 3em;
-        cursor: pointer;
-        transition: transform 0.1s ease;
-        user-select: none;
-      }
-
-      .falling-pineapple:hover {
-        transform: scale(1.2);
-      }
-
-      .falling-pineapple.sliced {
-        animation: sliceEffect 0.5s ease-out;
-      }
-
-      @keyframes sliceEffect {
-        0% {
-          transform: scale(1) rotate(0deg);
-          opacity: 1;
-        }
-        100% {
-          transform: scale(0.5) rotate(180deg);
-          opacity: 0;
-        }
-      }
-
-      .game-controls {
-        display: flex;
-        justify-content: space-around;
-        margin-top: 15px;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      .game-stat-box {
-        background: #fff8e7;
-        padding: 10px 20px;
-        border-radius: 10px;
-        text-align: center;
-        min-width: 100px;
-      }
-
-      .game-stat-box .stat-label {
-        font-size: 0.9em;
-        color: #666;
-        margin-bottom: 5px;
-      }
-
-      .game-stat-box .stat-value {
-        font-size: 1.5em;
-        font-weight: bold;
-        color: #f6a41b;
-      }
-
-      .start-game-btn {
-        padding: 12px 30px;
-        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-        color: white;
-        border: none;
-        border-radius: 20px;
-        font-size: 1em;
-        font-weight: bold;
-        cursor: pointer;
-        transition: transform 0.3s ease;
-        box-shadow: 0 4px 10px rgba(246, 164, 27, 0.3);
-      }
-
-      .start-game-btn:hover {
-        transform: scale(1.05);
-      }
-
-      .start-game-btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
-
-      .game-over-message {
-        text-align: center;
-        padding: 20px;
-        background: #fff8e7;
-        border-radius: 10px;
-        margin-top: 15px;
-        display: none;
-      }
-
-      .game-over-message h4 {
-        color: #f6a41b;
-        margin-bottom: 10px;
       }
 
       @media (max-width: 768px) {
@@ -456,7 +445,7 @@
           padding: 15px;
         }
 
-        .slicer-game {
+        .cone-game {
           padding: 15px;
           margin-left: -15px;
           margin-right: -15px;
@@ -510,16 +499,18 @@
   <body>
     <div class="container">
       <div class="header">
-        <h1>🍍 La Piña</h1>
-        <p class="scientific-name">Ananas comosus</p>
+        <h1>🌲 El Pino</h1>
+        <p class="scientific-name">Pinus spp.</p>
       </div>
 
       <div class="content">
-        <div class="slicer-game">
-          <h3>Juego: ¡Cosecha las Piñas!</h3>
+        <div class="cone-game">
+          <h3 style="color: #2d5016; text-align: center; margin-bottom: 15px">
+            Juego: ¡Recolecta las Piñas de Pino!
+          </h3>
           <div class="game-instructions">
             ¡Haz clic en las piñas que caen antes de que lleguen al suelo!
-            Tienes 30 segundos. ¡Evita las bombas 💣!
+            Tienes 30 segundos. ¡Evita las hojas secas 🍂!
           </div>
 
           <div class="game-area" id="gameArea"></div>
@@ -527,23 +518,23 @@
           <div class="game-controls">
             <div class="game-stat-box">
               <div class="stat-label">Puntos</div>
-              <div class="stat-value" id="slicerScore">0</div>
+              <div class="stat-value" id="coneScore">0</div>
             </div>
             <div class="game-stat-box">
               <div class="stat-label">Tiempo</div>
-              <div class="stat-value" id="slicerTime">30</div>
+              <div class="stat-value" id="coneTime">30</div>
             </div>
             <div class="game-stat-box">
-              <div class="stat-label">Piñas cosechadas</div>
-              <div class="stat-value" id="slicerCount">0</div>
+              <div class="stat-label">Piñas recolectadas</div>
+              <div class="stat-value" id="coneCount">0</div>
             </div>
           </div>
 
           <div style="text-align: center; margin-top: 15px">
             <button
               class="start-game-btn"
-              id="startSlicerBtn"
-              onclick="startSlicerGame()"
+              id="startConeBtn"
+              onclick="startConeGame()"
             >
               Iniciar Juego
             </button>
@@ -557,68 +548,74 @@
 
         <div class="image-container">
           <img
-            src="https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=800"
-            alt="Piña"
+            src="https://images.unsplash.com/photo-1518709594023-6eab9bab7b23?w=800"
+            alt="Pino"
           />
         </div>
 
         <div class="info-section">
-          <h2>Sobre la Piña</h2>
+          <h2>Sobre el Pino</h2>
           <p>
-            La piña es una fruta tropical originaria de Sudamérica,
-            específicamente de Brasil y Paraguay. Es conocida por su sabor dulce
-            y refrescante, y su característica corona de hojas espinosas.
+            Los pinos son árboles coníferos pertenecientes al género Pinus, uno
+            de los más antiguos y resistentes del planeta. Son árboles de hoja
+            perenne (no pierden sus hojas en invierno) que pueden vivir cientos
+            de años y alcanzar alturas impresionantes.
           </p>
           <p>
-            Lo fascinante de la piña es que en realidad no es una sola fruta,
-            sino un conjunto de muchas frutas pequeñas fusionadas. Cada "ojo" o
-            hexágono en su superficie representa una flor individual que se
-            fusionó con las demás.
+            Lo más característico de los pinos son sus hojas en forma de agujas,
+            agrupadas en fascículos, y sus piñas (conos) que contienen las
+            semillas. Los pinos están perfectamente adaptados para sobrevivir en
+            condiciones difíciles, desde frío extremo hasta suelos pobres.
           </p>
         </div>
 
         <div class="facts-grid">
           <div class="fact-card">
-            <div class="label">Peso promedio</div>
-            <div class="value">1-2 kg</div>
+            <div class="label">Altura máxima</div>
+            <div class="value">50-80 m</div>
           </div>
           <div class="fact-card">
-            <div class="label">Tiempo de crecimiento</div>
-            <div class="value">18-24 meses</div>
+            <div class="label">Longevidad</div>
+            <div class="value">100-1000 años</div>
           </div>
           <div class="fact-card">
-            <div class="label">Flores fusionadas</div>
-            <div class="value">100-200</div>
+            <div class="label">Especies</div>
+            <div class="value">+120</div>
           </div>
           <div class="fact-card">
-            <div class="label">Vitamina C</div>
-            <div class="value">80% diario</div>
+            <div class="label">Resina anual</div>
+            <div class="value">3-10 kg</div>
           </div>
         </div>
 
         <div class="curiosity-box">
           <h3>💡 ¿Sabías que...?</h3>
           <p>
-            La piña contiene una enzima llamada bromelina que ayuda a digerir
-            proteínas. Por eso, si comes mucha piña fresca, puede hacer que tu
-            lengua se sienta un poco extraña. ¡La piña literalmente te está
-            "comiendo" de vuelta mientras la comes!
+            El pino más antiguo del mundo es un Pinus longaeva (pino
+            bristlecone) en California, Estados Unidos, que tiene más de 5,000
+            años de edad. ¡Estaba vivo cuando se construyeron las pirámides de
+            Egipto! Además, los pinos liberan sustancias aromáticas llamadas
+            terpenos que no solo dan ese olor característico del bosque, sino
+            que también tienen propiedades antibacterianas y ayudan a purificar
+            el aire.
           </p>
         </div>
 
         <div class="info-section">
           <h2>Importancia en la Biodiversidad</h2>
           <p>
-            Las plantas de piña son importantes en sus ecosistemas nativos
-            porque proporcionan néctar a colibríes y otros polinizadores. Sus
-            hojas duras y espinosas ofrecen refugio a pequeños animales e
-            insectos.
+            Los bosques de pinos son ecosistemas fundamentales que albergan una
+            enorme biodiversidad. Proporcionan hogar y alimento a ardillas,
+            pájaros carpinteros, búhos, zorros y muchos otros animales. Sus
+            semillas (piñones) son un alimento rico en nutrientes para la fauna
+            silvestre.
           </p>
           <p>
-            Después de dar fruto una vez, la planta madre produce "hijuelos" que
-            crecen alrededor de ella, creando nuevas plantas. Este método de
-            reproducción ayuda a estabilizar el suelo y prevenir la erosión en
-            terrenos inclinados.
+            Los pinos también son importantes para prevenir la erosión del suelo
+            con sus extensas raíces, regular el ciclo del agua, y capturar CO₂
+            de la atmósfera. Muchos ecosistemas de montaña dependen
+            completamente de los bosques de coníferas como los pinos para
+            mantener el equilibrio ecológico.
           </p>
         </div>
 
@@ -626,46 +623,46 @@
           <h2>🎮 ¡Demuestra lo que aprendiste!</h2>
 
           <div class="question" id="q1">
-            <h3>1. ¿La piña es una sola fruta o muchas frutas fusionadas?</h3>
+            <h3>1. ¿Qué tipo de árbol es el pino?</h3>
             <div class="options">
               <div class="option" onclick="checkAnswer(1, 0, false)">
-                Es una sola fruta grande
+                Árbol de hoja caduca
               </div>
               <div class="option" onclick="checkAnswer(1, 1, true)">
-                Son muchas frutas pequeñas fusionadas
+                Árbol de hoja perenne (conífera)
               </div>
               <div class="option" onclick="checkAnswer(1, 2, false)">
-                Es una verdura tropical
+                Árbol tropical
               </div>
             </div>
           </div>
 
           <div class="question" id="q2">
-            <h3>2. ¿De dónde es originaria la piña?</h3>
+            <h3>2. ¿Dónde están las semillas del pino?</h3>
             <div class="options">
-              <div class="option" onclick="checkAnswer(2, 0, false)">
-                Asia tropical
+              <div class="option" onclick="checkAnswer(2, 0, true)">
+                En las piñas (conos)
               </div>
-              <div class="option" onclick="checkAnswer(2, 1, true)">
-                Sudamérica (Brasil y Paraguay)
+              <div class="option" onclick="checkAnswer(2, 1, false)">
+                En las raíces
               </div>
               <div class="option" onclick="checkAnswer(2, 2, false)">
-                África
+                En la corteza
               </div>
             </div>
           </div>
 
           <div class="question" id="q3">
-            <h3>3. ¿Cuánto tiempo tarda en crecer una piña?</h3>
+            <h3>3. ¿Cuántos años puede vivir un pino?</h3>
             <div class="options">
               <div class="option" onclick="checkAnswer(3, 0, false)">
-                3-6 meses
+                10-20 años
               </div>
               <div class="option" onclick="checkAnswer(3, 1, false)">
-                1 año exacto
+                Máximo 50 años
               </div>
               <div class="option" onclick="checkAnswer(3, 2, true)">
-                18-24 meses
+                100 a más de 1000 años
               </div>
             </div>
           </div>
@@ -682,43 +679,43 @@
         </div>
 
         <div class="quiz-section drag-drop-game">
-          <h2>🎯 Juego: Partes de la Piña</h2>
+          <h2>🎯 Juego: Partes del Pino</h2>
           <div class="game-instructions">
             ¡Arrastra cada parte a su función correcta!
           </div>
 
           <div class="parts-container" id="partsContainer">
-            <div class="draggable" draggable="true" data-part="corona">
-              Corona
+            <div class="draggable" draggable="true" data-part="agujas">
+              Agujas
             </div>
-            <div class="draggable" draggable="true" data-part="pulpa">
-              Pulpa
+            <div class="draggable" draggable="true" data-part="pina">Piña</div>
+            <div class="draggable" draggable="true" data-part="resina">
+              Resina
             </div>
-            <div class="draggable" draggable="true" data-part="cascara">
-              Cáscara
+            <div class="draggable" draggable="true" data-part="corteza">
+              Corteza
             </div>
-            <div class="draggable" draggable="true" data-part="ojos">Ojos</div>
           </div>
 
           <div class="drop-zones">
-            <div class="drop-zone" data-correct="corona">
+            <div class="drop-zone" data-correct="agujas">
               <span class="description"
-                >Se puede plantar para crear una nueva piña</span
+                >Realizan fotosíntesis y están adaptadas al frío</span
               >
             </div>
-            <div class="drop-zone" data-correct="pulpa">
+            <div class="drop-zone" data-correct="pina">
               <span class="description"
-                >Contiene vitaminas y la enzima bromelina</span
+                >Contiene y protege las semillas del árbol</span
               >
             </div>
-            <div class="drop-zone" data-correct="cascara">
+            <div class="drop-zone" data-correct="resina">
               <span class="description"
-                >Protege la fruta y tiene diseño hexagonal</span
+                >Protege al árbol de plagas y cicatriza heridas</span
               >
             </div>
-            <div class="drop-zone" data-correct="ojos">
+            <div class="drop-zone" data-correct="corteza">
               <span class="description"
-                >Cada uno representa una flor fusionada</span
+                >Protege el tronco del fuego y el frío extremo</span
               >
             </div>
           </div>
@@ -779,10 +776,10 @@
           const percentage = (quizScore / totalQuestions) * 100;
           let message =
             percentage === 100
-              ? '🎉 ¡Perfecto! ¡Eres un experto en piñas!'
+              ? '🎉 ¡Perfecto! ¡Eres un experto en pinos!'
               : percentage >= 66
-              ? '👏 ¡Muy bien! Conoces mucho sobre esta fruta.'
-              : '🍍 ¡Sigue aprendiendo! Las piñas son increíbles.';
+              ? '👏 ¡Muy bien! Conoces mucho sobre estos árboles.'
+              : '🌲 ¡Sigue aprendiendo! Los pinos son increíbles.';
 
           scoreDiv.innerHTML = `Puntuación: ${quizScore}/${totalQuestions}<br>${message}`;
           resetBtn.style.display = 'block';
@@ -888,53 +885,53 @@
         document.getElementById('dragResetBtn').style.display = 'none';
       }
 
-      // Slicer Game
-      let slicerScore = 0;
-      let slicerTime = 30;
-      let slicerCount = 0;
-      let slicerGameActive = false;
-      let slicerTimer = null;
+      // Cone Collection Game
+      let coneScore = 0;
+      let coneTime = 30;
+      let coneCount = 0;
+      let coneGameActive = false;
+      let coneTimer = null;
       let spawnInterval = null;
 
-      function startSlicerGame() {
+      function startConeGame() {
         // Reset
-        slicerScore = 0;
-        slicerTime = 30;
-        slicerCount = 0;
-        slicerGameActive = true;
+        coneScore = 0;
+        coneTime = 30;
+        coneCount = 0;
+        coneGameActive = true;
 
-        document.getElementById('slicerScore').textContent = '0';
-        document.getElementById('slicerTime').textContent = '30';
-        document.getElementById('slicerCount').textContent = '0';
+        document.getElementById('coneScore').textContent = '0';
+        document.getElementById('coneTime').textContent = '30';
+        document.getElementById('coneCount').textContent = '0';
         document.getElementById('gameOverMessage').style.display = 'none';
-        document.getElementById('startSlicerBtn').disabled = true;
+        document.getElementById('startConeBtn').disabled = true;
         document.getElementById('gameArea').innerHTML = '';
 
         // Timer countdown
-        slicerTimer = setInterval(() => {
-          slicerTime--;
-          document.getElementById('slicerTime').textContent = slicerTime;
+        coneTimer = setInterval(() => {
+          coneTime--;
+          document.getElementById('coneTime').textContent = coneTime;
 
-          if (slicerTime <= 0) {
-            endSlicerGame();
+          if (coneTime <= 0) {
+            endConeGame();
           }
         }, 1000);
 
-        // Spawn pineapples
+        // Spawn cones
         spawnInterval = setInterval(spawnFallingItem, 800);
       }
 
       function spawnFallingItem() {
-        if (!slicerGameActive) return;
+        if (!coneGameActive) return;
 
         const gameArea = document.getElementById('gameArea');
         const item = document.createElement('div');
-        item.className = 'falling-pineapple';
+        item.className = 'falling-cone';
 
-        // 15% chance of bomb, 85% pineapple
-        const isBomb = Math.random() < 0.15;
-        item.textContent = isBomb ? '💣' : '🍍';
-        item.dataset.type = isBomb ? 'bomb' : 'pineapple';
+        // 20% chance of leaf, 80% cone
+        const isLeaf = Math.random() < 0.2;
+        item.textContent = isLeaf ? '🍂' : '🌰';
+        item.dataset.type = isLeaf ? 'leaf' : 'cone';
 
         // Random horizontal position
         const leftPosition = Math.random() * (gameArea.offsetWidth - 60);
@@ -945,20 +942,20 @@
 
         // Click handler
         item.addEventListener('click', () => {
-          if (!slicerGameActive) return;
+          if (!coneGameActive) return;
 
-          if (item.dataset.type === 'pineapple') {
-            slicerScore += 10;
-            slicerCount++;
-            document.getElementById('slicerScore').textContent = slicerScore;
-            document.getElementById('slicerCount').textContent = slicerCount;
+          if (item.dataset.type === 'cone') {
+            coneScore += 10;
+            coneCount++;
+            document.getElementById('coneScore').textContent = coneScore;
+            document.getElementById('coneCount').textContent = coneCount;
           } else {
-            // Hit bomb - penalty
-            slicerScore = Math.max(0, slicerScore - 20);
-            document.getElementById('slicerScore').textContent = slicerScore;
+            // Hit leaf - penalty
+            coneScore = Math.max(0, coneScore - 15);
+            document.getElementById('coneScore').textContent = coneScore;
           }
 
-          item.classList.add('sliced');
+          item.classList.add('collected');
           setTimeout(() => item.remove(), 500);
         });
 
@@ -966,7 +963,7 @@
         let topPosition = -60;
         const fallSpeed = 2 + Math.random() * 2; // Variable speed
         const fallInterval = setInterval(() => {
-          if (!slicerGameActive) {
+          if (!coneGameActive) {
             clearInterval(fallInterval);
             item.remove();
             return;
@@ -980,21 +977,21 @@
             clearInterval(fallInterval);
             item.remove();
 
-            // Penalty for missing pineapple
-            if (item.dataset.type === 'pineapple') {
-              slicerScore = Math.max(0, slicerScore - 5);
-              document.getElementById('slicerScore').textContent = slicerScore;
+            // Penalty for missing cone
+            if (item.dataset.type === 'cone') {
+              coneScore = Math.max(0, coneScore - 5);
+              document.getElementById('coneScore').textContent = coneScore;
             }
           }
         }, 30);
       }
 
-      function endSlicerGame() {
-        slicerGameActive = false;
-        clearInterval(slicerTimer);
+      function endConeGame() {
+        coneGameActive = false;
+        clearInterval(coneTimer);
         clearInterval(spawnInterval);
 
-        document.getElementById('startSlicerBtn').disabled = false;
+        document.getElementById('startConeBtn').disabled = false;
         document.getElementById('gameArea').innerHTML = '';
 
         // Show results
@@ -1002,12 +999,12 @@
         const finalMsg = document.getElementById('finalScoreMessage');
 
         let message = '';
-        if (slicerScore >= 200) {
-          message = `¡Increíble! Cosechaste ${slicerCount} piñas con ${slicerScore} puntos. ¡Eres un experto agricultor! 🏆`;
-        } else if (slicerScore >= 100) {
-          message = `¡Muy bien! Cosechaste ${slicerCount} piñas con ${slicerScore} puntos. ¡Buen trabajo! 👏`;
+        if (coneScore >= 200) {
+          message = `¡Increíble! Recolectaste ${coneCount} piñas con ${coneScore} puntos. ¡Eres un experto recolector! 🏆`;
+        } else if (coneScore >= 100) {
+          message = `¡Muy bien! Recolectaste ${coneCount} piñas con ${coneScore} puntos. ¡Buen trabajo! 👏`;
         } else {
-          message = `Cosechaste ${slicerCount} piñas con ${slicerScore} puntos. ¡Sigue practicando! 💪`;
+          message = `Recolectaste ${coneCount} piñas con ${coneScore} puntos. ¡Sigue practicando! 💪`;
         }
 
         finalMsg.textContent = message;

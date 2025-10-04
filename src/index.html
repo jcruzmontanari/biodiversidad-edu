@@ -109,6 +109,9 @@
       .card:nth-child(11) {
         animation-delay: 1.1s;
       }
+      .card:nth-child(12) {
+        animation-delay: 1.2s;
+      }
 
       @keyframes cardAppear {
         from {
@@ -181,8 +184,11 @@
       .card.flores .card-header {
         background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
       }
-      .card.pina .card-header {
-        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+      .card.pino .card-header {
+        background: linear-gradient(135deg, #2d5016 0%, #61892f 100%);
+      }
+      .card.hueso .card-header {
+        background: linear-gradient(135deg, #a67c52 0%, #c9a186 100%);
       }
       .card.coral .card-header {
         background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
@@ -234,6 +240,14 @@
         }
       }
     </style>
+    <script>
+      window.va =
+        window.va ||
+        function () {
+          (window.vaq = window.vaq || []).push(arguments);
+        };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
     <div class="container">
@@ -259,18 +273,18 @@
           </div>
         </div>
 
-        <div class="card pina">
+        <div class="card pino">
           <div class="card-header">
-            <div class="card-icon">🍍</div>
-            <div class="card-title">Piña</div>
-            <div class="card-scientific">Ananas comosus</div>
+            <div class="card-icon">🌲</div>
+            <div class="card-title">Pino</div>
+            <div class="card-scientific">Pinus spp.</div>
           </div>
           <div class="card-body">
             <p class="card-description">
-              Fruta tropical que es en realidad muchas frutas fusionadas. Tarda
-              18-24 meses en crecer.
+              Árbol conífera de hoja perenne que puede vivir más de 1000 años.
+              Sus piñas contienen semillas.
             </p>
-            <a href="pina.html" class="card-link">Explorar →</a>
+            <a href="pino.html" class="card-link">Explorar →</a>
           </div>
         </div>
 
@@ -406,6 +420,21 @@
               animal.
             </p>
             <a href="caparazon.html" class="card-link">Explorar →</a>
+          </div>
+        </div>
+
+        <div class="card hueso">
+          <div class="card-header">
+            <div class="card-icon">🦴</div>
+            <div class="card-title">Hueso</div>
+            <div class="card-scientific">Estructura esquelética</div>
+          </div>
+          <div class="card-body">
+            <p class="card-description">
+              Estructura dura que forma el esqueleto. Devuelve minerales al
+              suelo y alberga vida.
+            </p>
+            <a href="hueso.html" class="card-link">Explorar →</a>
           </div>
         </div>
       </div>

@@ -62,6 +62,137 @@
         padding: 30px;
       }
 
+      /* Coral Protection Game */
+      .coral-game {
+        margin-bottom: 30px;
+      }
+
+      .coral-game-area {
+        position: relative;
+        height: 300px;
+        background: linear-gradient(180deg, #0891b2 0%, #67e8f9 100%);
+        border-radius: 10px;
+        overflow: hidden;
+        border: 3px solid #4facfe;
+        cursor: crosshair;
+      }
+
+      .falling-item {
+        position: absolute;
+        font-size: 3em;
+        cursor: pointer;
+        transition: transform 0.1s ease;
+        user-select: none;
+      }
+
+      .falling-item:hover {
+        transform: scale(1.2);
+      }
+
+      .falling-item.clicked {
+        animation: coralEffect 0.5s ease-out;
+      }
+
+      @keyframes coralEffect {
+        0% {
+          transform: scale(1) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(0.5) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .game-controls {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .game-stat-box {
+        background: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-align: center;
+        min-width: 100px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .game-stat-box .stat-label {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      .game-stat-box .stat-value {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #0891b2;
+      }
+
+      .start-game-btn {
+        padding: 12px 30px;
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        border: none;
+        border-radius: 20px;
+        font-size: 1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 10px rgba(79, 172, 254, 0.3);
+      }
+
+      .start-game-btn:hover {
+        transform: scale(1.05);
+      }
+
+      .start-game-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .game-over-message {
+        text-align: center;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        margin-top: 15px;
+        display: none;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .game-over-message h4 {
+        color: #0891b2;
+        margin-bottom: 10px;
+      }
+
+      @media (max-width: 768px) {
+        .coral-game {
+          padding: 15px;
+          margin-left: -15px;
+          margin-right: -15px;
+          border-radius: 0;
+          margin-bottom: 15px;
+        }
+
+        .coral-game-area {
+          height: 250px;
+        }
+
+        .game-controls {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .game-stat-box {
+          width: 100%;
+        }
+      }
+
       .image-container {
         text-align: center;
         margin: 20px 0;
@@ -406,6 +537,48 @@
       </div>
 
       <div class="content">
+        <div class="quiz-section coral-game">
+          <h3 style="color: #0891b2; text-align: center; margin-bottom: 15px">
+            Juego: ¡Protege los Corales! 🪸
+          </h3>
+          <div class="game-instructions">
+            ¡Haz clic en los corales para protegerlos! Tienes 30 segundos.
+            ¡Evita las amenazas ⚠️!
+          </div>
+
+          <div class="coral-game-area" id="coralGameArea"></div>
+
+          <div class="game-controls">
+            <div class="game-stat-box">
+              <div class="stat-label">Puntos</div>
+              <div class="stat-value" id="coralScore">0</div>
+            </div>
+            <div class="game-stat-box">
+              <div class="stat-label">Tiempo</div>
+              <div class="stat-value" id="coralTime">30</div>
+            </div>
+            <div class="game-stat-box">
+              <div class="stat-label">Corales protegidos</div>
+              <div class="stat-value" id="coralCount">0</div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 15px">
+            <button
+              class="start-game-btn"
+              id="startCoralBtn"
+              onclick="startCoralGame()"
+            >
+              Iniciar Juego
+            </button>
+          </div>
+
+          <div class="game-over-message" id="coralGameOverMessage">
+            <h4>🎉 ¡Juego Terminado!</h4>
+            <p id="coralFinalScoreMessage"></p>
+          </div>
+        </div>
+
         <div class="image-container">
           <img
             src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800"
@@ -655,6 +828,121 @@
     </div>
 
     <script>
+      // Coral Protection Game
+      let coralScore = 0;
+      let coralTime = 30;
+      let coralCount = 0;
+      let coralGameActive = false;
+      let coralTimer = null;
+      let coralSpawnInterval = null;
+
+      function startCoralGame() {
+        coralScore = 0;
+        coralTime = 30;
+        coralCount = 0;
+        coralGameActive = true;
+
+        document.getElementById('coralScore').textContent = '0';
+        document.getElementById('coralTime').textContent = '30';
+        document.getElementById('coralCount').textContent = '0';
+        document.getElementById('coralGameOverMessage').style.display = 'none';
+        document.getElementById('startCoralBtn').disabled = true;
+        document.getElementById('coralGameArea').innerHTML = '';
+
+        coralTimer = setInterval(() => {
+          coralTime--;
+          document.getElementById('coralTime').textContent = coralTime;
+
+          if (coralTime <= 0) {
+            endCoralGame();
+          }
+        }, 1000);
+
+        coralSpawnInterval = setInterval(spawnFallingCoralItem, 800);
+      }
+
+      function spawnFallingCoralItem() {
+        if (!coralGameActive) return;
+
+        const gameArea = document.getElementById('coralGameArea');
+        const item = document.createElement('div');
+        item.className = 'falling-item';
+
+        const isThreat = Math.random() < 0.3;
+        item.textContent = isThreat ? '⚠️' : '🪸';
+        item.dataset.type = isThreat ? 'threat' : 'coral';
+
+        const leftPosition = Math.random() * (gameArea.offsetWidth - 60);
+        item.style.left = leftPosition + 'px';
+        item.style.top = '-60px';
+
+        gameArea.appendChild(item);
+
+        item.addEventListener('click', () => {
+          if (!coralGameActive) return;
+
+          if (item.dataset.type === 'coral') {
+            coralScore += 10;
+            coralCount++;
+            document.getElementById('coralScore').textContent = coralScore;
+            document.getElementById('coralCount').textContent = coralCount;
+          } else {
+            coralScore = Math.max(0, coralScore - 15);
+            document.getElementById('coralScore').textContent = coralScore;
+          }
+
+          item.classList.add('clicked');
+          setTimeout(() => item.remove(), 500);
+        });
+
+        let topPosition = -60;
+        const fallSpeed = 2 + Math.random() * 2;
+        const fallInterval = setInterval(() => {
+          if (!coralGameActive) {
+            clearInterval(fallInterval);
+            item.remove();
+            return;
+          }
+
+          topPosition += fallSpeed;
+          item.style.top = topPosition + 'px';
+
+          if (topPosition > gameArea.offsetHeight) {
+            clearInterval(fallInterval);
+            item.remove();
+
+            if (item.dataset.type === 'coral') {
+              coralScore = Math.max(0, coralScore - 5);
+              document.getElementById('coralScore').textContent = coralScore;
+            }
+          }
+        }, 30);
+      }
+
+      function endCoralGame() {
+        coralGameActive = false;
+        clearInterval(coralTimer);
+        clearInterval(coralSpawnInterval);
+
+        document.getElementById('startCoralBtn').disabled = false;
+        document.getElementById('coralGameArea').innerHTML = '';
+
+        const gameOverMsg = document.getElementById('coralGameOverMessage');
+        const finalMsg = document.getElementById('coralFinalScoreMessage');
+
+        let message = '';
+        if (coralScore >= 200) {
+          message = `¡Increíble! Protegiste ${coralCount} corales con ${coralScore} puntos. ¡Eres un guardián del arrecife! 🏆`;
+        } else if (coralScore >= 100) {
+          message = `¡Muy bien! Protegiste ${coralCount} corales con ${coralScore} puntos. ¡Buen trabajo! 👏`;
+        } else {
+          message = `Protegiste ${coralCount} corales con ${coralScore} puntos. ¡Sigue practicando! 💪`;
+        }
+
+        finalMsg.textContent = message;
+        gameOverMsg.style.display = 'block';
+      }
+
       // Quiz
       let quizScore = 0;
       let quizAnswered = 0;

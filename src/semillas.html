@@ -62,6 +62,137 @@
         padding: 30px;
       }
 
+      /* Seed Planting Game */
+      .seed-game {
+        margin-bottom: 30px;
+      }
+
+      .seed-game-area {
+        position: relative;
+        height: 300px;
+        background: linear-gradient(180deg, #87ceeb 0%, #d4a574 100%);
+        border-radius: 10px;
+        overflow: hidden;
+        border: 3px solid #d4a574;
+        cursor: crosshair;
+      }
+
+      .falling-item {
+        position: absolute;
+        font-size: 3em;
+        cursor: pointer;
+        transition: transform 0.1s ease;
+        user-select: none;
+      }
+
+      .falling-item:hover {
+        transform: scale(1.2);
+      }
+
+      .falling-item.clicked {
+        animation: seedEffect 0.5s ease-out;
+      }
+
+      @keyframes seedEffect {
+        0% {
+          transform: scale(1) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(0.5) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .game-controls {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .game-stat-box {
+        background: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-align: center;
+        min-width: 100px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .game-stat-box .stat-label {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      .game-stat-box .stat-value {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #8b6914;
+      }
+
+      .start-game-btn {
+        padding: 12px 30px;
+        background: linear-gradient(135deg, #d4a574 0%, #e9c891 100%);
+        color: white;
+        border: none;
+        border-radius: 20px;
+        font-size: 1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 10px rgba(212, 165, 116, 0.3);
+      }
+
+      .start-game-btn:hover {
+        transform: scale(1.05);
+      }
+
+      .start-game-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .game-over-message {
+        text-align: center;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        margin-top: 15px;
+        display: none;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .game-over-message h4 {
+        color: #8b6914;
+        margin-bottom: 10px;
+      }
+
+      @media (max-width: 768px) {
+        .seed-game {
+          padding: 15px;
+          margin-left: -15px;
+          margin-right: -15px;
+          border-radius: 0;
+          margin-bottom: 15px;
+        }
+
+        .seed-game-area {
+          height: 250px;
+        }
+
+        .game-controls {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .game-stat-box {
+          width: 100%;
+        }
+      }
+
       .image-container {
         text-align: center;
         margin: 20px 0;
@@ -369,9 +500,51 @@
       </div>
 
       <div class="content">
+        <div class="quiz-section seed-game">
+          <h3 style="color: #8b6914; text-align: center; margin-bottom: 15px">
+            Juego: ¡Planta las Semillas! 🌾
+          </h3>
+          <div class="game-instructions">
+            ¡Haz clic en las semillas que caen para plantarlas! Tienes 30
+            segundos. ¡Evita las piedras 🪨!
+          </div>
+
+          <div class="seed-game-area" id="seedGameArea"></div>
+
+          <div class="game-controls">
+            <div class="game-stat-box">
+              <div class="stat-label">Puntos</div>
+              <div class="stat-value" id="seedScore">0</div>
+            </div>
+            <div class="game-stat-box">
+              <div class="stat-label">Tiempo</div>
+              <div class="stat-value" id="seedTime">30</div>
+            </div>
+            <div class="game-stat-box">
+              <div class="stat-label">Semillas plantadas</div>
+              <div class="stat-value" id="seedCount">0</div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 15px">
+            <button
+              class="start-game-btn"
+              id="startSeedBtn"
+              onclick="startSeedGame()"
+            >
+              Iniciar Juego
+            </button>
+          </div>
+
+          <div class="game-over-message" id="seedGameOverMessage">
+            <h4>🎉 ¡Juego Terminado!</h4>
+            <p id="seedFinalScoreMessage"></p>
+          </div>
+        </div>
+
         <div class="image-container">
           <img
-            src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800"
+            src="https://images.unsplash.com/photo-1595433707802-6b2626ef1c91?w=800"
             alt="Semillas"
           />
         </div>
@@ -563,6 +736,121 @@
     </div>
 
     <script>
+      // Seed Planting Game
+      let seedScore = 0;
+      let seedTime = 30;
+      let seedCount = 0;
+      let seedGameActive = false;
+      let seedTimer = null;
+      let seedSpawnInterval = null;
+
+      function startSeedGame() {
+        seedScore = 0;
+        seedTime = 30;
+        seedCount = 0;
+        seedGameActive = true;
+
+        document.getElementById('seedScore').textContent = '0';
+        document.getElementById('seedTime').textContent = '30';
+        document.getElementById('seedCount').textContent = '0';
+        document.getElementById('seedGameOverMessage').style.display = 'none';
+        document.getElementById('startSeedBtn').disabled = true;
+        document.getElementById('seedGameArea').innerHTML = '';
+
+        seedTimer = setInterval(() => {
+          seedTime--;
+          document.getElementById('seedTime').textContent = seedTime;
+
+          if (seedTime <= 0) {
+            endSeedGame();
+          }
+        }, 1000);
+
+        seedSpawnInterval = setInterval(spawnFallingSeedItem, 800);
+      }
+
+      function spawnFallingSeedItem() {
+        if (!seedGameActive) return;
+
+        const gameArea = document.getElementById('seedGameArea');
+        const item = document.createElement('div');
+        item.className = 'falling-item';
+
+        const isStone = Math.random() < 0.25;
+        item.textContent = isStone ? '🪨' : '🌾';
+        item.dataset.type = isStone ? 'stone' : 'seed';
+
+        const leftPosition = Math.random() * (gameArea.offsetWidth - 60);
+        item.style.left = leftPosition + 'px';
+        item.style.top = '-60px';
+
+        gameArea.appendChild(item);
+
+        item.addEventListener('click', () => {
+          if (!seedGameActive) return;
+
+          if (item.dataset.type === 'seed') {
+            seedScore += 10;
+            seedCount++;
+            document.getElementById('seedScore').textContent = seedScore;
+            document.getElementById('seedCount').textContent = seedCount;
+          } else {
+            seedScore = Math.max(0, seedScore - 15);
+            document.getElementById('seedScore').textContent = seedScore;
+          }
+
+          item.classList.add('clicked');
+          setTimeout(() => item.remove(), 500);
+        });
+
+        let topPosition = -60;
+        const fallSpeed = 2 + Math.random() * 2;
+        const fallInterval = setInterval(() => {
+          if (!seedGameActive) {
+            clearInterval(fallInterval);
+            item.remove();
+            return;
+          }
+
+          topPosition += fallSpeed;
+          item.style.top = topPosition + 'px';
+
+          if (topPosition > gameArea.offsetHeight) {
+            clearInterval(fallInterval);
+            item.remove();
+
+            if (item.dataset.type === 'seed') {
+              seedScore = Math.max(0, seedScore - 5);
+              document.getElementById('seedScore').textContent = seedScore;
+            }
+          }
+        }, 30);
+      }
+
+      function endSeedGame() {
+        seedGameActive = false;
+        clearInterval(seedTimer);
+        clearInterval(seedSpawnInterval);
+
+        document.getElementById('startSeedBtn').disabled = false;
+        document.getElementById('seedGameArea').innerHTML = '';
+
+        const gameOverMsg = document.getElementById('seedGameOverMessage');
+        const finalMsg = document.getElementById('seedFinalScoreMessage');
+
+        let message = '';
+        if (seedScore >= 200) {
+          message = `¡Increíble! Plantaste ${seedCount} semillas con ${seedScore} puntos. ¡Eres un experto jardinero! 🏆`;
+        } else if (seedScore >= 100) {
+          message = `¡Muy bien! Plantaste ${seedCount} semillas con ${seedScore} puntos. ¡Buen trabajo! 👏`;
+        } else {
+          message = `Plantaste ${seedCount} semillas con ${seedScore} puntos. ¡Sigue practicando! 💪`;
+        }
+
+        finalMsg.textContent = message;
+        gameOverMsg.style.display = 'block';
+      }
+
       // Quiz
       let quizScore = 0;
       let quizAnswered = 0;

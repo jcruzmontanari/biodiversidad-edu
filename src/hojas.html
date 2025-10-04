@@ -328,6 +328,137 @@
         transform: scale(1.05);
       }
 
+      /* Photosynthesis Game */
+      .photosynthesis-game {
+        margin-bottom: 30px;
+      }
+
+      .photo-game-area {
+        position: relative;
+        height: 300px;
+        background: linear-gradient(180deg, #87ceeb 0%, #e8f5e9 100%);
+        border-radius: 10px;
+        overflow: hidden;
+        border: 3px solid #56ab2f;
+        cursor: crosshair;
+      }
+
+      .falling-leaf {
+        position: absolute;
+        font-size: 3em;
+        cursor: pointer;
+        transition: transform 0.1s ease;
+        user-select: none;
+      }
+
+      .falling-leaf:hover {
+        transform: scale(1.2);
+      }
+
+      .falling-leaf.clicked {
+        animation: photoEffect 0.5s ease-out;
+      }
+
+      @keyframes photoEffect {
+        0% {
+          transform: scale(1) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(0.5) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .game-controls {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .game-stat-box {
+        background: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-align: center;
+        min-width: 100px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .game-stat-box .stat-label {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      .game-stat-box .stat-value {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #2d7a2e;
+      }
+
+      .start-game-btn {
+        padding: 12px 30px;
+        background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+        color: white;
+        border: none;
+        border-radius: 20px;
+        font-size: 1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 10px rgba(86, 171, 47, 0.3);
+      }
+
+      .start-game-btn:hover {
+        transform: scale(1.05);
+      }
+
+      .start-game-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .game-over-message {
+        text-align: center;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        margin-top: 15px;
+        display: none;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .game-over-message h4 {
+        color: #2d7a2e;
+        margin-bottom: 10px;
+      }
+
+      @media (max-width: 768px) {
+        .photosynthesis-game {
+          padding: 15px;
+          margin-left: -15px;
+          margin-right: -15px;
+          border-radius: 0;
+          margin-bottom: 15px;
+        }
+
+        .photo-game-area {
+          height: 250px;
+        }
+
+        .game-controls {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .game-stat-box {
+          width: 100%;
+        }
+      }
+
       @media (max-width: 768px) {
         body {
           padding: 0;
@@ -399,6 +530,48 @@
       </div>
 
       <div class="content">
+        <div class="quiz-section photosynthesis-game">
+          <h3 style="color: #2d7a2e; text-align: center; margin-bottom: 15px">
+            Juego: ¡Fotosíntesis! 🌱
+          </h3>
+          <div class="game-instructions">
+            ¡Haz clic en las hojas verdes que caen para producir oxígeno! Tienes
+            30 segundos. ¡Evita las hojas secas 🍂!
+          </div>
+
+          <div class="photo-game-area" id="photoGameArea"></div>
+
+          <div class="game-controls">
+            <div class="game-stat-box">
+              <div class="stat-label">Puntos</div>
+              <div class="stat-value" id="photoScore">0</div>
+            </div>
+            <div class="game-stat-box">
+              <div class="stat-label">Tiempo</div>
+              <div class="stat-value" id="photoTime">30</div>
+            </div>
+            <div class="game-stat-box">
+              <div class="stat-label">O₂ producido</div>
+              <div class="stat-value" id="photoCount">0</div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 15px">
+            <button
+              class="start-game-btn"
+              id="startPhotoBtn"
+              onclick="startPhotoGame()"
+            >
+              Iniciar Juego
+            </button>
+          </div>
+
+          <div class="game-over-message" id="photoGameOverMessage">
+            <h4>🎉 ¡Juego Terminado!</h4>
+            <p id="photoFinalScoreMessage"></p>
+          </div>
+        </div>
+
         <div class="image-container">
           <img
             src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=800"
@@ -675,6 +848,121 @@
     </div>
 
     <script>
+      // Photosynthesis Game
+      let photoScore = 0;
+      let photoTime = 30;
+      let photoCount = 0;
+      let photoGameActive = false;
+      let photoTimer = null;
+      let photoSpawnInterval = null;
+
+      function startPhotoGame() {
+        photoScore = 0;
+        photoTime = 30;
+        photoCount = 0;
+        photoGameActive = true;
+
+        document.getElementById('photoScore').textContent = '0';
+        document.getElementById('photoTime').textContent = '30';
+        document.getElementById('photoCount').textContent = '0';
+        document.getElementById('photoGameOverMessage').style.display = 'none';
+        document.getElementById('startPhotoBtn').disabled = true;
+        document.getElementById('photoGameArea').innerHTML = '';
+
+        photoTimer = setInterval(() => {
+          photoTime--;
+          document.getElementById('photoTime').textContent = photoTime;
+
+          if (photoTime <= 0) {
+            endPhotoGame();
+          }
+        }, 1000);
+
+        photoSpawnInterval = setInterval(spawnFallingLeaf, 800);
+      }
+
+      function spawnFallingLeaf() {
+        if (!photoGameActive) return;
+
+        const gameArea = document.getElementById('photoGameArea');
+        const leaf = document.createElement('div');
+        leaf.className = 'falling-leaf';
+
+        const isDry = Math.random() < 0.2;
+        leaf.textContent = isDry ? '🍂' : '🍃';
+        leaf.dataset.type = isDry ? 'dry' : 'green';
+
+        const leftPosition = Math.random() * (gameArea.offsetWidth - 60);
+        leaf.style.left = leftPosition + 'px';
+        leaf.style.top = '-60px';
+
+        gameArea.appendChild(leaf);
+
+        leaf.addEventListener('click', () => {
+          if (!photoGameActive) return;
+
+          if (leaf.dataset.type === 'green') {
+            photoScore += 10;
+            photoCount++;
+            document.getElementById('photoScore').textContent = photoScore;
+            document.getElementById('photoCount').textContent = photoCount;
+          } else {
+            photoScore = Math.max(0, photoScore - 15);
+            document.getElementById('photoScore').textContent = photoScore;
+          }
+
+          leaf.classList.add('clicked');
+          setTimeout(() => leaf.remove(), 500);
+        });
+
+        let topPosition = -60;
+        const fallSpeed = 2 + Math.random() * 2;
+        const fallInterval = setInterval(() => {
+          if (!photoGameActive) {
+            clearInterval(fallInterval);
+            leaf.remove();
+            return;
+          }
+
+          topPosition += fallSpeed;
+          leaf.style.top = topPosition + 'px';
+
+          if (topPosition > gameArea.offsetHeight) {
+            clearInterval(fallInterval);
+            leaf.remove();
+
+            if (leaf.dataset.type === 'green') {
+              photoScore = Math.max(0, photoScore - 5);
+              document.getElementById('photoScore').textContent = photoScore;
+            }
+          }
+        }, 30);
+      }
+
+      function endPhotoGame() {
+        photoGameActive = false;
+        clearInterval(photoTimer);
+        clearInterval(photoSpawnInterval);
+
+        document.getElementById('startPhotoBtn').disabled = false;
+        document.getElementById('photoGameArea').innerHTML = '';
+
+        const gameOverMsg = document.getElementById('photoGameOverMessage');
+        const finalMsg = document.getElementById('photoFinalScoreMessage');
+
+        let message = '';
+        if (photoScore >= 200) {
+          message = `¡Increíble! Produjiste ${photoCount} unidades de O₂ con ${photoScore} puntos. ¡Eres un experto en fotosíntesis! 🏆`;
+        } else if (photoScore >= 100) {
+          message = `¡Muy bien! Produjiste ${photoCount} unidades de O₂ con ${photoScore} puntos. ¡Buen trabajo! 👏`;
+        } else {
+          message = `Produjiste ${photoCount} unidades de O₂ con ${photoScore} puntos. ¡Sigue practicando! 💪`;
+        }
+
+        finalMsg.textContent = message;
+        gameOverMsg.style.display = 'block';
+      }
+
       // Quiz
       let quizScore = 0;
       let quizAnswered = 0;
