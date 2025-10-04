@@ -415,15 +415,100 @@
         color: #ff6b9d;
       }
 
+      .maze-buttons {
+        display: none;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        max-width: 200px;
+        margin: 15px auto;
+      }
+
+      .maze-btn {
+        padding: 15px;
+        background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.5em;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+        box-shadow: 0 2px 8px rgba(255, 107, 157, 0.3);
+      }
+
+      .maze-btn:active {
+        transform: scale(0.95);
+      }
+
+      .maze-btn:disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
       @media (max-width: 768px) {
+        body {
+          padding: 0;
+        }
+
+        .container {
+          border-radius: 0;
+        }
+
+        .content {
+          padding: 15px;
+        }
+
+        .maze-section {
+          padding: 15px;
+          margin-left: -15px;
+          margin-right: -15px;
+          border-radius: 0;
+        }
+
+        .maze-container {
+          max-width: none;
+          padding: 10px;
+          margin: 10px 0;
+        }
+
         .maze-grid {
           grid-template-columns: repeat(10, 1fr);
-          gap: 1px;
-          padding: 5px;
+          gap: 2px;
+          padding: 8px;
         }
 
         .maze-cell {
+          font-size: 1.2em;
+        }
+
+        .maze-controls p {
+          font-size: 0.9em;
+        }
+
+        .maze-buttons {
+          display: grid;
+        }
+
+        .maze-stats {
+          flex-direction: row;
+          gap: 20px;
+        }
+
+        .header h1 {
+          font-size: 2em;
+        }
+
+        .header {
+          padding: 30px 20px;
+        }
+
+        .reset-btn {
+          padding: 12px 30px;
           font-size: 1em;
+        }
+
+        .facts-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 15px;
         }
       }
     </style>
@@ -445,7 +530,15 @@
           <div class="maze-container">
             <div id="mazeGrid" class="maze-grid"></div>
             <div class="maze-controls">
-              <p>⬆️ ⬇️ ⬅️ ➡️ Usa las flechas del teclado</p>
+              <p>⬆️ ⬇️ ⬅️ ➡️ Usa las flechas del teclado o los botones</p>
+              <div class="maze-buttons">
+                <div></div>
+                <button class="maze-btn" onclick="moveMaze('up')">⬆️</button>
+                <div></div>
+                <button class="maze-btn" onclick="moveMaze('left')">⬅️</button>
+                <button class="maze-btn" onclick="moveMaze('down')">⬇️</button>
+                <button class="maze-btn" onclick="moveMaze('right')">➡️</button>
+              </div>
               <button class="reset-btn" onclick="resetMaze()">
                 Reiniciar Laberinto
               </button>
@@ -885,31 +978,25 @@
         }
       }
 
-      function handleMazeKeyPress(e) {
+      function moveMaze(direction) {
         if (mazeCompleted) return;
 
         let newX = playerPos.x;
         let newY = playerPos.y;
 
-        switch (e.key) {
-          case 'ArrowUp':
+        switch (direction) {
+          case 'up':
             newY--;
-            e.preventDefault();
             break;
-          case 'ArrowDown':
+          case 'down':
             newY++;
-            e.preventDefault();
             break;
-          case 'ArrowLeft':
+          case 'left':
             newX--;
-            e.preventDefault();
             break;
-          case 'ArrowRight':
+          case 'right':
             newX++;
-            e.preventDefault();
             break;
-          default:
-            return;
         }
 
         if (isValidMove(newX, newY)) {
@@ -923,6 +1010,37 @@
           if (playerPos.x === endPos.x && playerPos.y === endPos.y) {
             completeMaze();
           }
+        }
+      }
+
+      function handleMazeKeyPress(e) {
+        if (mazeCompleted) return;
+
+        let direction = null;
+
+        switch (e.key) {
+          case 'ArrowUp':
+            direction = 'up';
+            e.preventDefault();
+            break;
+          case 'ArrowDown':
+            direction = 'down';
+            e.preventDefault();
+            break;
+          case 'ArrowLeft':
+            direction = 'left';
+            e.preventDefault();
+            break;
+          case 'ArrowRight':
+            direction = 'right';
+            e.preventDefault();
+            break;
+          default:
+            return;
+        }
+
+        if (direction) {
+          moveMaze(direction);
         }
       }
 
