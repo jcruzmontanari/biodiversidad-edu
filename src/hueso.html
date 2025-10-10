@@ -392,6 +392,48 @@
       </div>
 
       <div class="content">
+        <div class="quiz-section skeleton-game" style="margin-top: 0;">
+          <h2>🧩 Rompecabezas del Esqueleto</h2>
+          <div class="game-instructions">
+            ¡Ordena los huesos del esqueleto! Arrastra cada hueso a su posición correcta.
+          </div>
+
+          <div id="puzzleContainer" style="min-height: 300px; background: white; border-radius: 15px; padding: 20px; margin: 20px 0; position: relative;">
+            <div id="puzzleGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;">
+              <div class="puzzle-slot" data-id="skull" style="min-height: 100px; border: 3px dashed #e8dfd6; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 3em;">
+                <span class="slot-label" style="font-size: 0.3em; color: #999;">Cráneo</span>
+              </div>
+              <div class="puzzle-slot" data-id="ribs" style="min-height: 100px; border: 3px dashed #e8dfd6; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 3em;">
+                <span class="slot-label" style="font-size: 0.3em; color: #999;">Costillas</span>
+              </div>
+              <div class="puzzle-slot" data-id="spine" style="min-height: 100px; border: 3px dashed #e8dfd6; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 3em;">
+                <span class="slot-label" style="font-size: 0.3em; color: #999;">Columna</span>
+              </div>
+              <div class="puzzle-slot" data-id="arm" style="min-height: 100px; border: 3px dashed #e8dfd6; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 3em;">
+                <span class="slot-label" style="font-size: 0.3em; color: #999;">Brazo</span>
+              </div>
+              <div class="puzzle-slot" data-id="pelvis" style="min-height: 100px; border: 3px dashed #e8dfd6; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 3em;">
+                <span class="slot-label" style="font-size: 0.3em; color: #999;">Pelvis</span>
+              </div>
+              <div class="puzzle-slot" data-id="leg" style="min-height: 100px; border: 3px dashed #e8dfd6; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 3em;">
+                <span class="slot-label" style="font-size: 0.3em; color: #999;">Pierna</span>
+              </div>
+            </div>
+
+            <div id="puzzlePieces" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; padding: 20px; background: #faf6f2; border-radius: 10px;">
+              <div class="puzzle-piece" draggable="true" data-id="leg" style="padding: 20px; background: white; border: 3px solid #c9a186; border-radius: 10px; cursor: move; font-size: 3em; transition: all 0.3s ease;">🦵</div>
+              <div class="puzzle-piece" draggable="true" data-id="skull" style="padding: 20px; background: white; border: 3px solid #c9a186; border-radius: 10px; cursor: move; font-size: 3em; transition: all 0.3s ease;">💀</div>
+              <div class="puzzle-piece" draggable="true" data-id="ribs" style="padding: 20px; background: white; border: 3px solid #c9a186; border-radius: 10px; cursor: move; font-size: 3em; transition: all 0.3s ease;">🫁</div>
+              <div class="puzzle-piece" draggable="true" data-id="arm" style="padding: 20px; background: white; border: 3px solid #c9a186; border-radius: 10px; cursor: move; font-size: 3em; transition: all 0.3s ease;">💪</div>
+              <div class="puzzle-piece" draggable="true" data-id="pelvis" style="padding: 20px; background: white; border: 3px solid #c9a186; border-radius: 10px; cursor: move; font-size: 3em; transition: all 0.3s ease;">🦴</div>
+              <div class="puzzle-piece" draggable="true" data-id="spine" style="padding: 20px; background: white; border: 3px solid #c9a186; border-radius: 10px; cursor: move; font-size: 3em; transition: all 0.3s ease;">🔗</div>
+            </div>
+          </div>
+
+          <div class="score" id="puzzleScore">Piezas colocadas: 0/6</div>
+          <button class="reset-btn" onclick="resetPuzzle()" style="display: none;" id="puzzleResetBtn">Reiniciar Rompecabezas</button>
+        </div>
+
         <div class="image-container">
           <img
             src="https://images.unsplash.com/photo-1530210124550-912dc1381cb8?w=800"
@@ -859,6 +901,116 @@
           'Parejas correctas: 0/4';
         document.getElementById('matchResetBtn').style.display = 'none';
       }
+
+      // Puzzle Game
+      let puzzlePlaced = 0;
+      let draggedElement = null;
+
+      function initPuzzle() {
+        const pieces = document.querySelectorAll('.puzzle-piece');
+        const slots = document.querySelectorAll('.puzzle-slot');
+
+        pieces.forEach(piece => {
+          piece.addEventListener('dragstart', handleDragStart);
+          piece.addEventListener('dragend', handleDragEnd);
+        });
+
+        slots.forEach(slot => {
+          slot.addEventListener('dragover', handleDragOver);
+          slot.addEventListener('drop', handleDrop);
+        });
+      }
+
+      function handleDragStart(e) {
+        draggedElement = e.target;
+        e.target.style.opacity = '0.5';
+      }
+
+      function handleDragEnd(e) {
+        e.target.style.opacity = '1';
+      }
+
+      function handleDragOver(e) {
+        e.preventDefault();
+      }
+
+      function handleDrop(e) {
+        e.preventDefault();
+
+        const slot = e.currentTarget;
+        const slotId = slot.dataset.id;
+        const pieceId = draggedElement.dataset.id;
+
+        if (slotId === pieceId && !slot.classList.contains('filled')) {
+          const label = slot.querySelector('.slot-label');
+          if (label) label.remove();
+
+          slot.innerHTML = draggedElement.innerHTML;
+          slot.classList.add('filled');
+          slot.style.background = 'linear-gradient(135deg, #a67c52 0%, #c9a186 100%)';
+          slot.style.border = '3px solid #4caf50';
+
+          draggedElement.remove();
+          puzzlePlaced++;
+          updatePuzzleScore();
+        }
+      }
+
+      function updatePuzzleScore() {
+        const scoreDiv = document.getElementById('puzzleScore');
+        const resetBtn = document.getElementById('puzzleResetBtn');
+
+        scoreDiv.textContent = `Piezas colocadas: ${puzzlePlaced}/6`;
+
+        if (puzzlePlaced === 6) {
+          scoreDiv.innerHTML += '<br>🎊 ¡Perfecto! ¡Completaste el esqueleto!';
+          resetBtn.style.display = 'block';
+        }
+      }
+
+      function resetPuzzle() {
+        puzzlePlaced = 0;
+        const container = document.getElementById('puzzlePieces');
+        const slots = document.querySelectorAll('.puzzle-slot');
+
+        slots.forEach(slot => {
+          const slotId = slot.dataset.id;
+          const labels = {
+            'skull': 'Cráneo',
+            'ribs': 'Costillas',
+            'spine': 'Columna',
+            'arm': 'Brazo',
+            'pelvis': 'Pelvis',
+            'leg': 'Pierna'
+          };
+
+          slot.innerHTML = `<span class="slot-label" style="font-size: 0.3em; color: #999;">${labels[slotId]}</span>`;
+          slot.classList.remove('filled');
+          slot.style.background = '';
+          slot.style.border = '3px dashed #e8dfd6';
+        });
+
+        const pieces = [
+          { id: 'leg', emoji: '🦵' },
+          { id: 'skull', emoji: '💀' },
+          { id: 'ribs', emoji: '🫁' },
+          { id: 'arm', emoji: '💪' },
+          { id: 'pelvis', emoji: '🦴' },
+          { id: 'spine', emoji: '🔗' }
+        ];
+
+        container.innerHTML = pieces.map(p =>
+          `<div class="puzzle-piece" draggable="true" data-id="${p.id}" style="padding: 20px; background: white; border: 3px solid #c9a186; border-radius: 10px; cursor: move; font-size: 3em; transition: all 0.3s ease;">${p.emoji}</div>`
+        ).join('');
+
+        document.getElementById('puzzleScore').textContent = 'Piezas colocadas: 0/6';
+        document.getElementById('puzzleResetBtn').style.display = 'none';
+
+        initPuzzle();
+      }
+
+      // Initialize puzzle on page load
+      window.addEventListener('load', initPuzzle);
     </script>
   </body>
 </html>
