@@ -905,14 +905,22 @@
       // Puzzle Game
       let puzzlePlaced = 0;
       let draggedElement = null;
+      let touchElement = null;
+      let touchClone = null;
 
       function initPuzzle() {
         const pieces = document.querySelectorAll('.puzzle-piece');
         const slots = document.querySelectorAll('.puzzle-slot');
 
         pieces.forEach(piece => {
+          // Mouse events
           piece.addEventListener('dragstart', handleDragStart);
           piece.addEventListener('dragend', handleDragEnd);
+
+          // Touch events
+          piece.addEventListener('touchstart', handleTouchStart, { passive: false });
+          piece.addEventListener('touchmove', handleTouchMove, { passive: false });
+          piece.addEventListener('touchend', handleTouchEnd, { passive: false });
         });
 
         slots.forEach(slot => {
@@ -954,6 +962,87 @@
           puzzlePlaced++;
           updatePuzzleScore();
         }
+      }
+
+      // Touch event handlers for mobile
+      function handleTouchStart(e) {
+        e.preventDefault();
+        touchElement = e.target;
+
+        // Create a clone for visual feedback
+        touchClone = touchElement.cloneNode(true);
+        touchClone.style.position = 'fixed';
+        touchClone.style.zIndex = '1000';
+        touchClone.style.opacity = '0.8';
+        touchClone.style.pointerEvents = 'none';
+        touchClone.style.transform = 'scale(1.1)';
+        document.body.appendChild(touchClone);
+
+        touchElement.style.opacity = '0.3';
+
+        const touch = e.touches[0];
+        updateTouchClonePosition(touch);
+      }
+
+      function handleTouchMove(e) {
+        e.preventDefault();
+        if (!touchClone) return;
+
+        const touch = e.touches[0];
+        updateTouchClonePosition(touch);
+      }
+
+      function updateTouchClonePosition(touch) {
+        if (!touchClone) return;
+        touchClone.style.left = (touch.clientX - 40) + 'px';
+        touchClone.style.top = (touch.clientY - 40) + 'px';
+      }
+
+      function handleTouchEnd(e) {
+        e.preventDefault();
+
+        if (!touchElement || !touchClone) return;
+
+        const touch = e.changedTouches[0];
+        const dropTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+
+        // Find the slot (might be the slot itself or a child)
+        let slot = dropTarget;
+        while (slot && !slot.classList.contains('puzzle-slot')) {
+          slot = slot.parentElement;
+        }
+
+        if (slot && slot.classList.contains('puzzle-slot')) {
+          const slotId = slot.dataset.id;
+          const pieceId = touchElement.dataset.id;
+
+          if (slotId === pieceId && !slot.classList.contains('filled')) {
+            const label = slot.querySelector('.slot-label');
+            if (label) label.remove();
+
+            slot.innerHTML = touchElement.innerHTML;
+            slot.classList.add('filled');
+            slot.style.background = 'linear-gradient(135deg, #a67c52 0%, #c9a186 100%)';
+            slot.style.border = '3px solid #4caf50';
+
+            touchElement.remove();
+            puzzlePlaced++;
+            updatePuzzleScore();
+          } else {
+            // Wrong slot - restore opacity
+            touchElement.style.opacity = '1';
+          }
+        } else {
+          // Not dropped on a slot - restore opacity
+          touchElement.style.opacity = '1';
+        }
+
+        // Clean up
+        if (touchClone && touchClone.parentNode) {
+          touchClone.remove();
+        }
+        touchClone = null;
+        touchElement = null;
       }
 
       function updatePuzzleScore() {
